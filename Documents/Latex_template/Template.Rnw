@@ -1,0 +1,232 @@
+
+%----    Basic packages    ----%
+\documentclass{article}
+\usepackage[T1] {fontenc} 		  % Font encoding
+\usepackage [utf8] {inputenc}		% Encoding for the document
+\usepackage[a4paper,includeheadfoot,top=2.4cm, bottom=2cm, left=2.4cm, right=2.4cm]{geometry}  % margin settings
+\usepackage[english]{babel}
+
+
+%----    Packages for using Kable Extra    ----%
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+
+%----    Other packages    ----%
+\usepackage{tikz}
+\usepackage{graphicx}   % for including graphics
+\usepackage{amsmath}    % for math equation
+\usepackage{bm}         % for bold math
+\usepackage{csquotes}
+\usepackage{enumitem}   % for enumarate and itemize
+\setlist[enumerate]{font=\bfseries} % bold font for enumerate list
+\setlist[enumerate]{itemsep=0ex}    % reduce space between items
+\setlist[itemize]{itemsep=0ex}      % reduce space between items
+\usepackage[labelfont=bf]{caption}  % caption
+\usepackage[style=apa,backend=biber]{biblatex}  % bibliografia
+\addbibresource{biblio.bib}
+
+\usepackage{hyperref}    % ref between elements
+
+
+%----    LaTeX Settings    ----%
+
+\newcommand{\textstreach}{\renewcommand{\baselinestretch}{1.5}}{} % default line stretch
+\newcommand{\codestreach}{\renewcommand{\baselinestretch}{1}}{}   % code line streach
+
+\textstreach
+
+%----    Todo    -----%
+\newcommand{\todo}[1]{(\textcolor{red}{Todo: #1})}
+
+%---------------
+% Added comand to resolve bug of pgf path when looking for raster images
+\let\pgfimageWithoutPath\pgfimage
+\renewcommand{\pgfimage}[2][]{\pgfimageWithoutPath[#1]{figure/#2}}
+%---------------
+
+
+%%%%%%%%%%%%%%%%%%%%%%          Settings        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<knitr_settings, echo=FALSE, include=F, cache=FALSE>>=
+# Set root directory
+#knitr::opts_knit$set(root.dir = normalizePath(".."))
+
+# Chunks settings
+knitr::opts_chunk$set(echo = FALSE,
+                      # Plot settings
+                      dev = "tikz", dev.args=list(pointsize=12),fig.align='center',
+                     # fig.height=3, fig.width=5,
+                      # Code output width
+                      tidy=TRUE, tidy.opts = list(width.cutoff = 87),
+                      # Cache options
+                      cache = TRUE, autodep=TRUE)
+
+# Chunk theme
+thm=knit_theme$get("bclear")
+knitr::knit_theme$set(thm)
+knitr::opts_chunk$set(background = c(.985, .985, .985))
+
+@
+
+<<R_settings, echo=FALSE, include=F, cache=FALSE>>=
+
+system (paste ("biber", sub ("\\.Rnw$", "", current_input())))
+
+library("")
+
+# Option KableExtra
+options(knitr.kable.NA = '')
+
+## ggplot settings
+theme_set(theme_classic()+
+          theme(text = element_text(size=12)))
+
+knitr::read_chunk("../../R/Functions.R")           # Read chunks
+knitr::read_chunk("../../R/Auxiliary_functions.R") # Read chunks
+source("../../R/Functions.R")                      # Load main functions
+source("../../R/Auxiliary_functions.R")            # Load auxiliary functions
+
+#----    load drake results    ----
+
+# Use loadd() to load drake objects
+
+
+#-----    Labels    ----
+
+# Labels
+
+@
+
+
+% Document title info
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         Title           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Title
+\begin{titlepage}
+
+\centering
+	\vspace*{2cm}
+	{\huge \bf Title paper}\\
+	\vspace{1cm}
+	{\Large List authors\par}
+  \vspace{1cm}
+  {List affiliations\par}
+	\vspace{2cm}
+	{\huge\bfseries Title report\par}
+	\vspace{1cm}
+	{\Large\textit{Edited by}}
+
+	\vspace{1em}
+	{\Large Claudio Zandonella Callegher*}
+	\vfill
+	*e-mail address\par
+	\href{mailto:claudio.zandonella@gmail.com}{claudiozandonella@gmail.com}
+
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+
+	\vspace{2cm}
+
+\clearpage
+
+\clearpage
+\pagenumbering{Roman}
+
+
+\tableofcontents
+
+\clearpage
+
+\listoffigures
+\listoftables
+
+\end{titlepage}
+
+%----------------------------------------------------------------------------------%
+%--------------------------         Introduction         --------------------------%
+%----------------------------------------------------------------------------------%
+
+\pagenumbering{arabic}
+\section{Introduction}
+
+In this report the statistical analyses of the article \textit{""} are presented. The aim of the study was to.
+
+Here, we will focus only on the statistical analysis. For theoretical aspects, study selection, and results interpretation the reader can refer directly to the article.
+
+%------------------------
+\subsection{Report sections}
+
+The analysis report is divided into different sections:
+\begin{itemize}
+    \item{\textbf{Section~\ref{sec:Statistical_Approach}:} the statistical approach and the plan of analysis are presented.}
+    \item{\textbf{Section~\ref{sec:Data_Preparation}:} the dataset is presented with a brief description of each variable and prepared for the analysis.}
+    \item{\textbf{Section~\ref{sec:Descriptive_Statistics}:} the descriptive statistics are presented.}
+    \item{\textbf{Section~\ref{sec:Analysis_Results}:} the results of the analysis are described.}
+\end{itemize}
+
+\clearpage
+
+%----------------------------------------------------------------------------------%
+%--------------------------      Example fig and tab     --------------------------%
+%----------------------------------------------------------------------------------%
+
+\section{Example}
+
+<<Table>>=
+
+kable(example,"latex", booktabs=T,align = c("r",rep("r",3)),col.names = c(""),caption = "", escape = FALSE) %>%
+  row_spec(0,bold = T, align = "c") %>%
+  kableExtra::group_rows(1,3,group_label = "",escape = FALSE)%>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+  #footnote(general = "",footnote_as_chunk = T,escape=F)
+@
+
+<<Plot, fig.pos="!ht", fig.align="center", fig.height=4.5, fig.width=5.5, fig.cap="", fig.scap="">>=
+ggplot()
+@
+
+%----------------------------------------------------------------------------------%
+%--------------------------    Session Information   ------------------------------%
+%----------------------------------------------------------------------------------%
+
+\section{Session Information}
+
+<<Session Info, echo=T>>=
+  sessionInfo(package = NULL)
+@
+
+\clearpage
+
+\section*{Appendix A}
+\addcontentsline{toc}{section}{Appendix A:}
+
+\clearpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Bibliography}
+\printbibliography
+
+
+\end{document}
+
+
