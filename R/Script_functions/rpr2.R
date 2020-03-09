@@ -8,8 +8,10 @@
 library(MASS)
 #
 ## retro.r
-retro.r<-function(rho,n,sig.level=.05,B=10000,alternative = c("two.sided","less","greater"))
+retro.r<-function(rho,n,sig.level=.05,B=10000,alternative = c("two.sided","less","greater"), seed=NULL)
 {
+  if(!is.null(seed)){set.seed(seed = seed)}
+
   alternative = match.arg(alternative)
   # check on alternative
   if(rho>0 & alternative=="less") stop("If rho > 0, alternative must be two.sided or greater")
@@ -30,17 +32,17 @@ typeM <- mean(abs(r.sim[pval< sig.level])) / abs(rho) # cosi OK anche nel caso d
 # mean sig r
 ttor<-function(tc,n) sqrt((tc/sqrt(n-2))^2/(1+(tc/sqrt(n-2))^2))
 
-  if (alternative=="two.sided"){  
+  if (alternative=="two.sided"){
     tcrit<-qt(1-sig.level/2,n-2)
     rtemp<-ttor(tcrit,n)
     min.sig.r<-c(-rtemp,rtemp)
   }
-  if (alternative=="greater"){  
+  if (alternative=="greater"){
     tcrit<-qt(1-sig.level,n-2)
     rtemp<-ttor(tcrit,n)
     min.sig.r<-c(rtemp)
   }
-  if (alternative=="less"){  
+  if (alternative=="less"){
     tcrit<-qt(1-sig.level,n-2)
     rtemp<-ttor(tcrit,n)
     min.sig.r<-c(-rtemp)
@@ -60,8 +62,10 @@ ttor<-function(tc,n) sqrt((tc/sqrt(n-2))^2/(1+(tc/sqrt(n-2))^2))
 #### retro.r(-.20,n=40,alternative = "greater")
 #
 pro.r<-function(rho,sig.level=.05,power=.80,rangen = c(1,1000), B = 1e4, tol = .005,
-                alternative = c("two.sided","less","greater"))
+                alternative = c("two.sided","less","greater"), seed= NULL)
 {
+  if(!is.null(seed)){set.seed(seed = seed)}
+
   alternative = match.arg(alternative)
   # check on alternative
   if(rho>0 & alternative=="less") stop("If rho > 0, alternative must be two.sided or greater")
@@ -98,24 +102,24 @@ pro.r<-function(rho,sig.level=.05,power=.80,rangen = c(1,1000), B = 1e4, tol = .
       typeM <- mean(abs(r.sim[pval< sig.level])) / abs(rho)
       # mean sig r
       ttor<-function(tc,n) sqrt((tc/sqrt(n-2))^2/(1+(tc/sqrt(n-2))^2))
-      
-      if (alternative=="two.sided"){  
+
+      if (alternative=="two.sided"){
         tcrit<-qt(1-sig.level/2,n_target-2)
         rtemp<-ttor(tcrit,n_target)
         min.sig.r<-c(-rtemp,rtemp)
       }
-      if (alternative=="greater"){  
+      if (alternative=="greater"){
         tcrit<-qt(1-sig.level,n_target-2)
         rtemp<-ttor(tcrit,n_target)
         min.sig.r<-c(rtemp)
       }
-      if (alternative=="less"){  
+      if (alternative=="less"){
         tcrit<-qt(1-sig.level,n_target-2)
         rtemp<-ttor(tcrit,n_target)
         min.sig.r<-c(-rtemp)
       }
       #
-      
+
       if ( (est_power<=(power+tol)) & (est_power>(power-tol)) ) {
         find_power <- TRUE
       } else {

@@ -8,6 +8,8 @@
 # List of packages used in the analysis.
 
 library("MASS")
+library("tictoc")
+library("tidyverse")
 
 # packages_list <- c("")
 #
@@ -41,7 +43,7 @@ library("MASS")
 
 # conflicted::conflict_scout()    # See conflicts
 
-conflicted::conflict_prefer()
+#conflicted::conflict_prefer()
 
 #-----    ggplot2 settings    ----
 theme_set(theme_bw())
