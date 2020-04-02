@@ -76,7 +76,7 @@ my_retro.r<-function(rho,n,sig_level=.05,B=10000,alternative = c("two.sided","le
 #----    my_pro.r    ----
 
 my_pro.r<-function(rho,sig_level=.05,power=.80,rangen = c(1,1000), B = 1e4, tol = .005,
-                    alternative = c("two.sided","less","greater"), seed = NULL)
+                    alternative = c("two.sided","less","greater"), display_message=TRUE, seed = NULL)
 {
   # Set seed
   if(!is.null(seed)){set.seed(seed = seed)}
@@ -118,16 +118,23 @@ my_pro.r<-function(rho,sig_level=.05,power=.80,rangen = c(1,1000), B = 1e4, tol 
 
       est_power=sum(p_val<sig_level)/B
 
+      if (display_message == TRUE){
+        cat("Evaluating with n_target =", n_target, fill=TRUE)
+        cat("Estimated power is", round(est_power,2), fill=TRUE)
+        cat("\n")
+      }
+
+
       # Evaluate if power was obtained according to tolerance value
       if ( (est_power<=(power+tol)) && (est_power>=(power-tol)) ) {
         find_power <- TRUE
       } else {
-        if (length(n_seq)==1) { stop(" ")
+        if (length(n_seq)==1) { stop("Increase tolerance value")
         } else if ( est_power > (power-tol) ) {
-          (n_seq <- seq( min(n_seq), n_target, by = 1))
+          (n_seq <- seq( min(n_seq), n_target-1, by = 1))
           (n_target <- round(median(n_seq)))
         } else {
-          (n_seq <- seq( n_target, max(n_seq), by = 1))
+          (n_seq <- seq( n_target+1, max(n_seq), by = 1))
           (n_target <- round(median(n_seq)))
         }
       }
