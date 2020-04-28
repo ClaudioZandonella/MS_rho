@@ -1,0 +1,52 @@
+---
+title: "Appendix B: R Functions for Design Analysis Pearson Correlation"
+author: 
+date:
+bibliography: MS_rho.bib 
+cls: apa.csl
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("../../R/Design_analysis_r.R")
+```
+
+Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples and figures included in the article. 
+
+These functions can be used as a base to further develop design analysis in more complex scenarios that were beyond the aim of the paper.
+
+## R functions
+
+The code of the functions is available in the file `Design_analysis_r.R` at **todo{add link}**.
+
+After downloading the file `Design_analysis_r.R`, run the line `source("your_path/Design_analyisis_r.R")`, indicating the correct path where the file was saved. The script will automatically load in your work space the functions and two required R-package: `MASS` [@venablesModernAppliedStatistics2002] and `docstring` [@kurkiewiczDocstringProvidesDocstring2017]. If you don't have them already installed run the line `install.packages(c("MASS","docstring"))`. 
+
+The R functions are:
+
+- `retro_r()` for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the minimum correlation value that would result significant.
+```{r, eval=FALSE}
+retro_r(rho, n, alternative = c("two.sided", "less", "greater"), 
+        sig_level=.05, B=1e4, seed=NULL)
+```
+
+- `pro_r()` for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the minimum correlation value that would result significant. 
+```{r, eval=FALSE}
+pro_r(rho, power = .80, alternative = c("two.sided", "less", "greater"), 
+      sig_level = .05, range_n = c(1,1000), B = 1e4, tol = .005, 
+      display_message = TRUE, seed = NULL)
+```
+
+
+For further details run the line `docstring(retro_r)` or `docstring(pro_r)`. This creates a documentation similar to the help pages for R functions.
+
+**Note:** a third function is defined in the script (i.e., `compute_crit_r()`). This is an internal function that should not be used by the user.
+
+## Examples code
+
+## References
