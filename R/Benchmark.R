@@ -7,8 +7,8 @@ library("profvis")
 
 #----    load functions    ----#
 
-source("R/Script_functions/rpr2.R")
-source("R/Script_functions/my_rpr.R")
+source("R/rpr2.R")
+source("R/Design_analysis_r.R")
 
 
 #----    profiling retro    -----

@@ -152,3 +152,8 @@ pro.r<-function(rho,sig.level=.05,power=.80,rangen = c(1,1000), B = 1e4, tol = .
 ###
 ###
 # g.b. & g.a, 2020
+
+#----
+
+docstring::docstring(compute_crit_r)
+docstring::docstring(retro_r)
