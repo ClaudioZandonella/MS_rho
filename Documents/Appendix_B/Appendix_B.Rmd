@@ -43,7 +43,7 @@ pro_r(rho, power = .80, alternative = c("two.sided", "less", "greater"),
 ```
 
 
-For further details run the line `docstring(retro_r)` or `docstring(pro_r)`. This creates a documentation similar to the help pages for R functions.
+For further details about function arguments, run the line `docstring(retro_r)` or `docstring(pro_r)`. This creates a documentation similar to the help pages of R functions.
 
 **Note:** a third function is defined in the script (i.e., `compute_crit_r()`). This is an internal function that should not be used by the user.
 
