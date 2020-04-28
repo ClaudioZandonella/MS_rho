@@ -2,7 +2,7 @@
 title: "Appendix B: R Functions for Design Analysis Pearson Correlation"
 author: 
 date:
-bibliography: MS_rho.bib 
+bibliography: Appendix_B.bib 
 cls: apa.csl
 output: rmarkdown::html_vignette
 vignette: >
