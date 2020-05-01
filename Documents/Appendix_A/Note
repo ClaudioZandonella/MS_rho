@@ -1,0 +1,79 @@
+
+rho
+- varies between -1 and 1
+- Under H0 is normally distributed
+- Under H1 is not normally distributed
+- Fisher Z trasfomation
+
+- Monte Carlo simulation (stima per ricampionamento)
+
+
+#-----
+
+Estimating rho
+
+
+Type-M Type-S error behaviour
+
+Can be extended to regression coefficient
+
+#-----
+
+La media è meglio farla con rho o rho trasformati?
+
+#-----
+
+links:
+
+- https://stats.stackexchange.com/questions/400146/how-to-derive-the-formula-of-the-t-test-of-the-correlation-coefficient
+- https://math.stackexchange.com/questions/564751/how-can-i-simply-prove-that-the-pearson-correlation-coefficient-is-between-1-an
+
+
+#-----
+
+# Pearson Correlation and Design Analysis
+
+To conduct a Design Analysis, it is necessary to know the sampling distribution of the effect of interest not only under the Null-Hypothesis (H0), but also under the alternative Hypothesis (H1). The sampling distribution is the distribution of effects we would observe if N observations were sampled over and over again from a population with a given effect. This allows us to evaluate the statistical power and inferential risks of the study considered.
+
+Regarding Pearson's correlation between two normally distributed variables, the shape of its sampling distribution depends on the values of rho and N, and it is bounded between -1 and 1. The sampling distribution is approximately Normal if rho = 0. Whereas, for positive or negative values of rho, it is negatively skewed or positively skewed, respectively. Skewness is greater for higher absolute values of rho but decreases when larger sample sizes (N) are considered. In Figure~\ref{fig:sampling_rho}, correlation sampling distributions are presented for increasing values of rho and fixed sample size (N = 30).
+
+[Figure 1]
+
+In the following paragraphs, we consider the consequence of Pearson's correlation sampling distribution on statistical inference and the behaviour of Type-M and Type-S errors as a function of statistical power.
+
+\section{Statistical inference}
+
+To test an hypothesis or to derive confidence intervals, it is necessary that the sampling distribution of the effect of interest follows a known distribution. In the case of H0: rho = 0, the sample correlation is approximately Normally distributed with Standard Error SE(r) = \sqrt{(1-r^2)/(n-2)}. Thus, statistical inference is performed considering the t-statistic:
+t = r/SE(r) = r \sqrt{(n-2)/(1-r^2)},
+that follows a t-distribution with df = n-2.
+
+However, in the case of rho != 0, assuming normality would lead to unreliable results. As we have previously seen, for large values of rho and small sample sizes the sampling distribution is skewed. To overcome this issue, the Fisher transformation was introduced (Fisher, 1915):
+F(r) = 1/2 ln (1+r)/(1-r) = arctanh(r).
+Applying this transformation, the resulting sample distribution is approximately Normal with mean = F(rho) and SE = 1/sqrt{n-3}. Thus, statistical inference is performed considering the Z-scores.
+
+Alternatively, other methods can be used to obtain reliable results, as for example Monte Carlo simulation. Monte Carlo simulation is based on random sampling to approximate the quantities of interest. In the case of correlation, N observations are iteratively simulated from a bivariate normal distribution with a given rho, and the observed correlation is considered. As the number of iterations increases, the distribution of simulated correlation values approximates the actual correlation sampling distribution and it can be used to compute the quantities of interest.
+
+Although Monte Carlo methods are more computationally demanding than analytic solutions, this approach allows us to obtain reliable results in a wider range of conditions even when no closed-form solutions are available. For these reasons, the functions pro_rho and retro_rho, presented in this paper, are based on Monte Carlo simulation to compute power, Type-M, and Type-S error values. This guarantees a more general framework where other future applications can be easily integrated into the functions.
+
+\section{Type-M and Type-S errors}
+
+Design Analysis was first introduced by Gelman and Carlin (2014) assuming that the sampling distribution of the effect estimate follows a t-distribution. This is the case, for example, of Cohen's d effect size. Cohen's d is used to measure the mean difference between two groups on a continuous outcome. The behaviour of Type-M and Type-S errors as a function of statistical power in the case of Cohen's d is presented in Figure~\ref{fig:Plot_design_d}.
+
+[Fig2]
+
+For different values of true effect size (d = {.2, .5, .7, .9}), we can observe that, for high levels of power, Type-S and Type-M errors are low. Conversely, the Type-S and Type-M errors are high for low values of power. In particular, the relation between power and inferential errors is not influenced by the value of d (i.e., the four lines are overlapping). Limit cases are obtained for power = 1 and 0.05 (note that the lowest value of power is given by the alpha value chosen for the statistical significance threshold). In the former case, Type-S error is 0 and Type-M error is 1. In the latter case, Type-S error is 0.5 and the Type-M error value goes to infinity.
+
+In the case of Pearson's Correlation, we noted above that the sampling distribution is skewed for large values of rho and small sample sizes. Moreover, the support is bounded between -1 and 1. Thus, the relations between power, Type-M, and Type-S error are influenced by the value of true effect size (see Figure~\ref{fig:Plot_derign_rho}).
+
+[Fig3]
+
+We can observe how, for different values of correlation (rho = {.2, .5, .7, .9}), Type-M error increases at different rates when the power decrease, whereas Type-S error follows a consistent pattern (note that differences are due to numerical approximation). We can intuitively explain this behaviour considering that, for low levels of power, the sampling distribution includes a wider range of correlation values. However, correlation values can not exceed the value 1 and therefore the distribution becomes progressively more skewed. This does not influence the proportion of statistically significant sampled correlations with the incorrect sign (Type-S error), but it affects the mean absolute value of statistically significant sampled correlations (used to compute Type-M error). In particular, sampling distributions for greater values of rho becomes skewed more rapidly and thus Type-M error increases at a lower rate.
+
+Finally, since the correlation values are bounded, Type-M error for a given value of rho can increase only to a maximum value given by 1/rho. For example, for rho = .5 the maximum Type-M error is 2 as .5*2 = 1 (i.e., the maximum correlation value).
+
+In this appendix, we discussed for completeness the implications of conducting a Design Analysis in the case of Pearson's correlation effect size. We considered extreme scenarios that are unlikely to happen in real research settings. Nevertheless, we thought this was important for evaluating the statistical behaviour and properties of Type-M and Type-S error in the case of Pearson's correlation as well as helping researchers to deeply understand Design Analysis.
+
+
+
+
+#-----
