@@ -1,0 +1,10 @@
+# Cache folder
+cache/*
+
+# Figure folder
+figure/*
+
+# Latex Auxiliary files
+*.bbl
+*.tex
+*tikzDictionary
