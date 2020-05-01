@@ -84,6 +84,7 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
   #'
   #' @return A list containing the following components:
   #'   \item{rho}{the hypothetical population correlation value considered.}
+  #'   \item{n}{the sample size.}
   #'   \item{alternative}{the alternative hypothesis considered.}
   #'   \item{sig_level}{the significance level on which the alternative
   #'   hypothesis was evaluated.}
@@ -140,8 +141,9 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
   min_sig_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n)
 
   # Result object
-  out<-list(rho = rho,  alternative = alternative, sig_level = sig_level,
-            power = power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r)
+  out<-structure(list(rho = rho, n = n,  alternative = alternative, sig_level = sig_level,
+                      power = power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r),
+                 class = c("design_analysis","list"))
 
   return(out)
 }
@@ -150,7 +152,7 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
 #----    my_pro.r    ----
 
 pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"), sig_level = .05,
-                range_n = c(1,1000), B = 1e4, tol = .005, display_message = TRUE, seed = NULL){
+                range_n = c(1,1000), B = 1e4, tol = .01, display_message = FALSE, seed = NULL){
   #' Prospective Design Analysis for Perason Correlation Coefficient
   #'
   #' Given the hypothetical population correlation value and the required power
@@ -179,10 +181,10 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
   #'
   #' @return A list containing the following components:
   #'   \item{rho}{the hypothetical population correlation value considered.}
+  #'   \item{n}{the required sample size.}
   #'   \item{alternative}{the alternative hypothesis considered.}
   #'   \item{sig_level}{the significance level on which the alternative
   #'   hypothesis was evaluated.}
-  #'   \item{n}}{the required sample size.}
   #'   \item{power}{the resulting power level.}
   #'   \item{typeM}{the resulting Type-M error.}
   #'   \item{typeS}{the resulting Type-S error.}
@@ -278,8 +280,74 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
     min_sig_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n_target)
 
     # Result object
-    out <- list( rho = rho, alternative = alternative, sig_level = sig_level, n = n_target,
-                 power = est_power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r)
+    out <- structure(list( rho = rho, n = n_target, alternative = alternative, sig_level = sig_level,
+                           power = est_power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r),
+                     class = c("design_analysis","list"))
   }
   if (!is.null(out))  return(out)
 }
+
+#----    print.design_analysis (single line)    ----
+
+# print.design_analysis <- function(DA_list){
+#   output_text <- DA_list
+#
+#   # Round
+#   arguments <- unlist(lapply(DA_list, is.numeric))
+#   if(sum(arguments)!=0){
+#     output_text[arguments] <- lapply(output_text[arguments], round, 3)
+#   }
+#
+#   # Combine
+#   lenght_2 <- which(unlist(lapply(DA_list,function(x) length(x)!=1)))
+#   if(sum(lenght_2)!=0){
+#     output_text[lenght_2] <- paste0("±",abs(output_text[[lenght_2]][2]))
+#   }
+#
+#   cat(capture.output(noquote(unlist(output_text))), sep = '\n')
+#   invisible(DA_list)
+# }
+
+#----    print.design_analysis  (multiple lines)   ----
+
+print.design_analysis <- function(DA_list, prefix="\t"){
+  output_text <- DA_list
+
+  # Round
+  arguments <- unlist(lapply(DA_list, is.numeric))
+  if(sum(arguments)!=0){
+    output_text[arguments] <- lapply(output_text[arguments], round, 3)
+  }
+
+  # Combine
+  lenght_2 <- which(unlist(lapply(DA_list,function(x) length(x)!=1)))
+  if(sum(lenght_2)!=0){
+    output_text[lenght_2] <- paste0("±",abs(output_text[[lenght_2]][2]))
+  }
+
+  cat("\n")
+  cat(strwrap("Design Analysis", prefix = prefix), sep = "\n")
+  cat("\n")
+  cat("Hypothesized effect: rho = ", DA_list$rho, "\n", sep = "")
+  cat("\n")
+  cat("Study characteristics:",
+      capture.output(print(as.data.frame(t(unlist(
+        output_text[c("n", "alternative", "sig_level")]))),
+        print.gap = 3, right = F, row.names = F)), sep = '\n')
+  cat("\n")
+  cat("Inferential risks:",
+      capture.output(print(as.data.frame(t(unlist(
+        output_text[c("power", "typeM", "typeS")]))),
+        print.gap = 3, right = F, row.names = F)), sep = '\n')
+  cat("\n")
+  cat("Minimum significant r = ", output_text$min_sig_r)
+
+  invisible(DA_list)
+}
+
+#----
+
+
+
+
+
