@@ -117,6 +117,9 @@ system (paste ("biber", sub ("\\.Rnw$", "", current_input())))
 
 library("tidyverse")
 library("kableExtra")
+library("gridExtra")
+library("gtable")
+library("grid")
 
 # Option KableExtra
 options(knitr.kable.NA = '')
@@ -192,7 +195,7 @@ Gianmarco Altoè: \href{https://orcid.org/0000-0003-1154-9528}{0000-0003-1154-95
 
 Psychological science is increasingly committed to scrutinize its published findings by promoting large-scale replication efforts \citep{camererEvaluatingReplicabilityLaboratory2016, camererEvaluatingReplicabilitySocial2018, ebersoleManyLabsEvaluating2016, kleinInvestigatingVariationReplicability2014, kleinManyLabsInvestigating2018, opensciencecollaborationEstimatingReproducibilityPsychological2015}. In replication studies, the protocol of a previously published study is repeated as closely as possible with a new sample. Interestingly, many replication studies found smaller effects than originals, suggesting a sort of decline effect from original studies to replications \citep{camererEvaluatingReplicabilitySocial2018, opensciencecollaborationEstimatingReproducibilityPsychological2015, schoolerTurningLensScience2014}. Among the many factors that could explain such decline, one relates to a feature of study design: statistical power \citep{protzkoDeclineEffectsTypes2017}. In particular, it is plausible for original studies to have lower statistical power than their replications. When underpowered studies are analyzed using thresholds, such as statistical significance levels, effects passing such thresholds have to exaggerate the true effect size \citep{buttonPowerFailureWhy2013, gelmanTypeErrorMight2017, ioannidisWhyMostDiscovered2008, ioannidisEmergenceLargeTreatment2013, laneEstimatingEffectSize1978}. Indeed, as will be extensively shown below, in underpowered studies only large effects correspond to values that can reject the null hypothesis and be statistically significant. As a consequence, if the original study was underpowerd and found an exaggerated estimate of the effect, the replication results will likely show a decline. The concept of statistical power finds its natural developement in the Neyman-Pearson framework of statistical inference and this is the framework that we adopt in this contribution. Further discussion on the Neyman and Perason approach and a comparison with Null Hypothesis Significance Testing (NHST) is available in \citet{altoeEnhancingStatisticalInference2020} and \citet{gigerenzerNullRitualWhat2004}.
 
-Effect size exaggeration is a corollary consequence of low statistical power that might not be evident at first. Indeed, by definition, statistical power focuses on statistical significance, not effect size estimation (i.e., statistical power is the probability to find a statistically significant result if an effect of a certain size actually exists). However, effect size estimation and statistical significance are closely related. This point can be highlighted estimating the Type M (magnitude) and Type S (sign) errors characterizing a study design \citep{gelmanPowerCalculationsAssessing2014}. Given a study design (i.e. sample size, statistical test directionality, and $\alpha$ level), Type M error indicates the factor by which a statistically significant effect would be, on average, exaggerated. Type S error indicates the probability to find a statistically significant effect in the opposite direction to the one considered plausible. It is evident that both errors are defined starting from a reasoned guess on the plausible magnitude and direction of the effect under study, which is called \emph{plausible effect size} \citep{gelmanPowerCalculationsAssessing2014}. The analysis that researchers perform to consider Type M and Type S errors in their research practice is called \emph{design analysis}, given the special focus posed into considering the design of a study \citep{altoeEnhancingStatisticalInference2020, gelmanPowerCalculationsAssessing2014}.
+Effect size exaggeration is a corollary consequence of low statistical power that might not be evident at first. Indeed, by definition, statistical power focuses on statistical significance, not effect size estimation (i.e., statistical power is the probability to find a statistically significant result if an effect of a certain size actually exists). However, effect size estimation and statistical significance are closely related. This point can be highlighted estimating the Type M (magnitude) and Type S (sign) errors characterizing a study design \citep{gelmanPowerCalculationsAssessing2014}. Given a study design (i.e., sample size, statistical test directionality, and $\alpha$ level), Type M error indicates the factor by which a statistically significant effect would be, on average, exaggerated. Type S error indicates the probability to find a statistically significant effect in the opposite direction to the one considered plausible. It is evident that both errors are defined starting from a reasoned guess on the plausible magnitude and direction of the effect under study, which is called \emph{plausible effect size} \citep{gelmanPowerCalculationsAssessing2014}. The analysis that researchers perform to consider Type M and Type S errors in their research practice is called \emph{design analysis}, given the special focus posed into considering the design of a study \citep{altoeEnhancingStatisticalInference2020, gelmanPowerCalculationsAssessing2014}.
 
 Why do these errors matter? The exaggeration of effect sizes, in the right or in the wrong direction, has important consequences on a theoretical and applied level. On a theoretical level, studies’ designs with high Type M and Type S errors can foster distorted expectations on the effect under study, triggering a vicious cycle for the planning of future studies. This point is relevant also for the design of replication studies, which could turn out to be underpowered if they do not take into account possible inflations of the original effect \citep{buttonPowerFailureWhy2013}. When studies are used to inform policymaking and real-world interventions, implications can go beyond the academic research community and can impact society at large. In these settings, we could assist to a “hype and disappointment cycle” \citep{gelmanEmbracingVariationAccepting2019}, where true effects turn out to be much less impressive than expected. This can produce undesirable consequences on people’s lives, a consideration that invites researchers to assume responsibility in effectively communicating the risks related to effects quantification.
 
@@ -204,7 +207,7 @@ Type M (magnitude) and Type S (sign) errors are not widely known in the psycholo
 
 \section{Type M and Type S errors }
 
-Pearson correlation coefficient is a standardized effect size measure indicating the strength and the direction of the relationship between two continuous variables \citep{cohenStatisticalPowerAnalysis1988, ellisEssentialGuideEffect2010}. Even though the correlation coefficient is widely known, we briefly go over its main features using an example. Imagine that we were interested to measure the relationship between anxiety and depression in a population and we plan a study with \emph{n} participants, where, for each participant, we measure the level of anxiety (i.e. variable X) and the level of depression (i.e. variable Y). At the end of the study we will have n pairs of values X and Y. The correlation coefficient helps us answer the questions: how strong is the relationship between anxiety and depression in this population? Is the relationship positive or negative? Correlation ranges from -1 to +1, indicating respectively two extreme scenarios of perfect negative relationship and perfect positive relationship. Since the correlation coefficient is a dimensionless number, it is a signal to noise ratio where the signal is given by the covariance between the two variables ($cov(x,y)$) and the noise is expressed by the product between the standard deviations of the two variables ($S_x  S_y$; see Formula\ref{eq:correlation}). Following the conventional standards, in this contribution we will use the symbol $\rho$ to indicate the correlation in the population and the symbol \emph{r} to indicate the value measured in a sample.
+Pearson correlation coefficient is a standardized effect size measure indicating the strength and the direction of the relationship between two continuous variables \citep{cohenStatisticalPowerAnalysis1988, ellisEssentialGuideEffect2010}. Even though the correlation coefficient is widely known, we briefly go over its main features using an example. Imagine that we were interested to measure the relationship between anxiety and depression in a population and we plan a study with \emph{n} participants, where, for each participant, we measure the level of anxiety (i.e., variable X) and the level of depression (i.e., variable Y). At the end of the study we will have n pairs of values X and Y. The correlation coefficient helps us answer the questions: how strong is the relationship between anxiety and depression in this population? Is the relationship positive or negative? Correlation ranges from -1 to +1, indicating respectively two extreme scenarios of perfect negative relationship and perfect positive relationship. Since the correlation coefficient is a dimensionless number, it is a signal to noise ratio where the signal is given by the covariance between the two variables ($cov(x,y)$) and the noise is expressed by the product between the standard deviations of the two variables ($S_x  S_y$; see Formula\ref{eq:correlation}). Following the conventional standards, in this contribution we will use the symbol $\rho$ to indicate the correlation in the population and the symbol \emph{r} to indicate the value measured in a sample.
 \begin{equation}
 \label{eq:correlation}
 r=\frac{cov(x,y)}{S_x S_y}.
@@ -233,7 +236,7 @@ The central and possibly most difficult point in this process is reasoning on wh
 
 Researchers can consider Type M and Type S errors in their practice by performing a \emph{design analysis} \citep{altoeEnhancingStatisticalInference2020, gelmanPowerCalculationsAssessing2014}. Ideally, a design analysis should be performed when designing a study. In this phase it is specifically called \emph{prospective design analysis} and it can be used as a sample size planning strategy where statistical power is considered together with Type M and Type S errors. However, design analysis can also be beneficial to evaluate the inferential risks in studies that have already been conducted and where the study design is known. In these cases, Type M and Type S errors can support results interpretation by communicating the inferential risks in that research design. When design analysis happens at this later stage, it takes the name of \emph{retrospective design analysis}.
 
-In the following sections we illustrate how to perform prospective and retrospective design analysis using some examples. We developed two R functions to perform design analysis for Pearson correlation, which are available at the page \todo{…} . The function to perform a prospective design analysis is called “\texttt{pro\_r}”. It requires as input the plausible effect size (\texttt{rho}), the statistical power (\texttt{power}) the directionality of the test (\texttt{alternative}) which can be set as: “\texttt{two.sided}”, “\texttt{less}” or “\texttt{greate}r” . Type I error rate (\texttt{sig\_level}) is set as default at 5\% and can be changed by the user. The “\texttt{pro\_r}” function returns the necessary sample size to achieve the desired statistical power, Type M error rate, the Type S error probability, and the critical value(s) above which a statistically significant result can be found. The function to perform retrospective design analysis is called “\texttt{retro\_r}”. It requires as input the plausible effect size, the sample size used in the study, and the directionality of the test that was performed. Also in this case, Type I error rate is set as default at 5\% and can be changed by the user.  The function “\texttt{retro\_r}” returns the Type M error rate, the Type S error probability, and the critical value(s). \todo{For further details on (how to use)computational aspects regarding the R functions, we refer to Appendix A.}
+In the following sections we illustrate how to perform prospective and retrospective design analysis using some examples. We developed two R functions to perform design analysis for Pearson correlation, which are available at the page \todo{…} . The function to perform a prospective design analysis is \texttt{pro\_r()}. It requires as input the plausible effect size (\texttt{rho}), the statistical power (\texttt{power}) the directionality of the test (\texttt{alternative}) which can be set as: “\texttt{two.sided}”, “\texttt{less}” or “\texttt{greate}r” . Type I error rate (\texttt{sig\_level}) is set as default at 5\% and can be changed by the user. The \texttt{pro\_r()} function returns the necessary sample size to achieve the desired statistical power, Type M error rate, the Type S error probability, and the critical value(s) above which a statistically significant result can be found. The function to perform retrospective design analysis is \texttt{retro\_r()}. It requires as input the plausible effect size, the sample size used in the study, and the directionality of the test that was performed. Also in this case, Type I error rate is set as default at 5\% and can be changed by the user.  The function \texttt{retro\_r()} returns the Type M error rate, the Type S error probability, and the critical value(s). \todo{For further details on (how to use)computational aspects regarding the R functions, we refer to Appendix A.}
 
 %----------------------------------------------------------------------------------%
 %---------------------------         Case Study         ---------------------------%
@@ -256,17 +259,22 @@ A retrospective design analysis should start with thorough reasoning on the plau
 
 \section{Retrospective Design Analysis}
 
-To perform a retrospective design analysis on the case study, we need information on the research design and the plausible effect size. Based on the previous considerations, we set the plausible effect size to be $\rho=.25$. Information on the sample size was not available in the original study \citep{eisenbergerDoesRejectionHurt2003} and was retrieved from \citet{vulPuzzlinglyHighCorrelations2009} to be $n=13$. The $\alpha$ level and the directionality of the test were not reported in the original study, so for the purpose of this example we will consider $\alpha=.05$  and a two-tailed test. Given this study design, what are the inferential risks in terms of effect size estimation?We can use the R function “\texttt{retro\_r}”, which inputs and outputs are displayed \todo{below.}
+To perform a retrospective design analysis on the case study, we need information on the research design and the plausible effect size. Based on the previous considerations, we set the plausible effect size to be $\rho=.25$. Information on the sample size was not available in the original study \citep{eisenbergerDoesRejectionHurt2003} and was retrieved from \citet{vulPuzzlinglyHighCorrelations2009} to be $n=13$. The $\alpha$ level and the directionality of the test were not reported in the original study, so for the purpose of this example we will consider $\alpha=.05$  and a two-tailed test. Given this study design, what are the inferential risks in terms of effect size estimation?
+
+We can use the R function \texttt{retro\_r()}, which inputs and outputs are displayed in Figure~\ref{fig:retro_r}. In this study, the statistical power is .13, that is to say, there is a 13\% probability to reject the null hypothesis, if an effect of at least $\rho=|.25|$ exists. Consider this point together with the results obtained in the experiment: r = .88, p < .005 \citep[p. 291]{eisenbergerDoesRejectionHurt2003}. It is clear that, even though the probability to reject the null hypothesis is low (power of 13\%), this event could happen. And when it does happen, it is tempting to believe that results are \todo{impressive} \citep{gelmanStatisticalCrisisScience2014}. However, this design comes with serious inferential risks for the estimation of effect sizes, which could be grasped by presenting Type M and Type S errors. A glance at their value communicates that it is not impossible to find a statistically significant result, but when it does happen, the effect sizes could be largely overestimated - Type M = 2.58 - and maybe even in the wrong direction - Type S = .03. The Type M error rate of \todo{around} 2.60 indicates that a statistically significant correlation is on average about two and a half times the plausible value. In other words, statistically significant results emerging in such a research design will on average overestimate the plausible correlation coefficient by 160\%. The Type S error of  .03 suggests that there is a three percent probability to find a statistically significant result in the opposite direction, in this example, a negative relationship.
 
 \codestreach
-<<example_retro_r, echo=T>>=
+<<example_retro_r, eval=F>>=
 retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 2020)
 @
 
+\begin{figure}
+\centering
+  \includegraphics[height=5cm]{screens/retro}
+\caption{Input and Output of the function \texttt{retro\_r()} for retrospective design analysis. Case study: \citet{eisenbergerDoesRejectionHurt2003}. The plausible correlation coefficient is $\rho = .25$, the sample size is 13, and the statistical test is two-tailed.}\label{fig:retro_r}
+\end{figure}
 
-In this study, the statistical power is .13, that is to say, there is a 13\% probability to reject the null hypothesis, if an effect of at least $\rho=|.25|$ exists. Consider this point together with the results obtained in the experiment: r = .88, p < .005 \citep[p. 291]{eisenbergerDoesRejectionHurt2003}. It is clear that, even though the probability to reject the null hypothesis is low (power of 13\%), this event could happen. And when it does happen, it is tempting to believe that results are \todo{impressive} \citep{gelmanStatisticalCrisisScience2014}. However, this design comes with serious inferential risks for the estimation of effect sizes, which could be grasped by presenting Type M and Type S errors. A glance at their value communicates that it is not impossible to find a statistically significant result, but when it does happen, the effect sizes could be largely overestimated - Type M = 2.58 - and maybe even in the wrong direction - Type S = .03. The Type M error rate of \todo{around} 2.60 indicates that a statistically significant correlation is on average about two and a half times the plausible value. In other words, statistically significant results emerging in such a research design will on average overestimate the plausible correlation coefficient by 160\%. The Type S error of  .03 suggests that there is a three percent probability to find a statistically significant result in the opposite direction, in this example, a negative relationship.
-
-In this research design, the critical values above which a statistically significant result is declared correspond to $\rho=\pm .55$ (\todo{see output above}).  These values are highlighted in Figure~\ref{fig:Plot_winner} as the vertical lines in the sampling distribution of correlation coefficients under the null hypothesis. Notice that the plausible effect size lies in the region of acceptance of the null hypothesis. Therefore, it is impossible to simultaneously find a statistically significant result and estimate an effect close to the plausible one ($\rho=.25$). The figure represents the so called Winner’s curse: “the ‘lucky’ scientist who makes a discovery is cursed by finding an inflated estimate of that effect” \citep{buttonPowerFailureWhy2013}.
+In this research design, the critical values above which a statistically significant result is declared correspond to $\rho=\pm .55$ (Figure~\ref{fig:retro_r}).  These values are highlighted in Figure~\ref{fig:Plot_winner} as the vertical lines in the sampling distribution of correlation coefficients under the null hypothesis. Notice that the plausible effect size lies in the region of acceptance of the null hypothesis. Therefore, it is impossible to simultaneously find a statistically significant result and estimate an effect close to the plausible one ($\rho=.25$). The figure represents the so called Winner’s curse: “the ‘lucky’ scientist who makes a discovery is cursed by finding an inflated estimate of that effect” \citep{buttonPowerFailureWhy2013}.
 
 
 <<Plot_winner, fig.pos="H", fig.align="center", fig.height=3, fig.width=5, fig.cap="Winner's course. H$_0$ = Null Hypothesis, H$_1$ = Alternative Hypothesis. When sample size, directionality of the test and Type error probability are set, also the smallest effect size above which is possible to find a statistically significant result is set. In this case, the plausible effect size, $\\rho=.25$, lies in the region where it is not possible to reject H$_0$. Thus, it is impossible to simultaneously find a statistically significant result and an effect close to the plausible one. In other words, a statistically significant effect must exaggerate the plausible effect size.", fig.scap="Winner's course">>=
@@ -282,7 +290,7 @@ data_plot1 <- data.frame(
 ggplot(data_plot1)+
   stat_density(aes(rho, col=hypothesis, linetype=hypothesis),
                geom="line", size = 1, position="identity", bw = .1)+
-  geom_vline(xintercept = des_fit$min_sig_r)+
+  geom_vline(xintercept = des_fit$crit_r)+
   scale_linetype_manual(values = c(1,2))+
   scale_x_continuous(breaks = seq(-1, 1, by = .2))+
   coord_cartesian(xlim = c(-1,1))+
@@ -307,15 +315,23 @@ Ideally, Type M and Type S errors should be considered in the design phase of a 
 
 Imagine that we were part of the research team in the previous case study exploring the relationship between activity in the Anterior Cerebral Cortex and perceived distress. When drafting the research protocol, we face the inevitable discussion on how many participants we are going to recruit. This choice depends on available resources, type of study design, constraints of various nature and, importantly, the plausible magnitude and direction of the phenomenon that we are going to study. As previously mention, deciding on a plausible effect size is a fundamental step which requires great effort and should not be \todo{a game where different numbers are tried until the desired sample size is reached}. Instead, proposing a plausible effect size is where the expert knowledge of the researcher can be formalized and can greatly contribute to the informativeness of the study that is being planned. For the sake of this examples, we adopt the previous consideration and we suppose that common agreement is reached on a plausible correlation coefficient to be around $\rho=.25$. Finally, we would like to leave open the possibility to explore whether the relationship goes in the opposite direction to the one hypothesized, so we decide to perform a two-tailed test.
 
-We can implement the prospective design analysis using the function “\texttt{pro\_r}” which inputs and outputs are displayed in \todo{Figure 3}. About 125 participants are necessary to have 80 \% probability to detect an effect of at least $\rho=\pm .25$, if it actually exists. With this sample size, the Type S error is minimized and approximates zero. In this study design, the Type M error is 1.11 indicating that statistically significant results are on average exaggerated by 11\%. It is possible to notice that the critical values are $\rho=\pm .18$, further highlighting that our plausible effect size is actually included among those values that lead to the acceptance of the alternative hypothesis.
+We can implement the prospective design analysis using the function \texttt{pro\_r()} which inputs and outputs are displayed in Figure~\ref{fig:pro_r}. About 125 participants are necessary to have 80 \% probability to detect an effect of at least $\rho=\pm .25$, if it actually exists. With this sample size, the Type S error is minimized and approximates zero. In this study design, the Type M error is 1.12 indicating that statistically significant results are on average exaggerated by 12\%. It is possible to notice that the critical values are $\rho=\pm .18$, further highlighting that our plausible effect size is actually included among those values that lead to the acceptance of the alternative hypothesis.
 
-<<example_pro_r, echo=T>>=
+<<example_pro_r, eval=F>>=
 pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
 @
 
-In a design analysis, it is advisable to investigate how the inferential risks would change according to different scenarios in terms of statistical power and plausible effect size. Changes in both these factors impact Type M and Type S errors. For example, maintaining the plausible correlation of $\rho = .25$, if we decrease statistical power from .80 to .60 only 77 participants are required (see Table~\ref{tab:Table_pro_r}). However, this is associated with an increased Type M error rate from 1.12 to 1.28. That is to say, with 77 subjects the plausible effect size will be on average overestimated by 28\%. Alternatively, imagine that we would like to maintain a statistical power of 80\%, what happens if the plausible effect size is slightly larger or smaller? The necessary sample size would spike to 344 for a $\rho=.15$  and decrease to 60 for $\rho=.35$. In both scenarios, the Type M error remains about 1.12, which reflects the more general point that for 80\% power, Type M error is around 1.10. In all these scenario, Type S error is close to zero, hence not worrisome.
+\begin{figure}
+\centering
+  \includegraphics[height=5cm]{screens/pro}
+\caption{Input and Output of the function \texttt{pro\_r()} for prospective design analysis. Plausible correlation coefficient is $\rho = .25$, statistical power is 80\% and the statistical test is two-tailed.}\label{fig:pro_r}
+\end{figure}
 
-<<Prepare_data_table>>=
+In a design analysis, it is advisable to investigate how the inferential risks would change according to different scenarios in terms of statistical power and plausible effect size. Changes in both these factors impact Type M and Type S errors. For example, maintaining the plausible correlation of $\rho = .25$, if we decrease statistical power from .80 to .60 only 76 participants are required (see Table~\ref{tab:Table_pro_r}). However, this is associated with an increased Type M error rate from 1.12 to 1.28. That is to say, with 76 subjects the plausible effect size will be on average overestimated by 28\%. Alternatively, imagine that we would like to maintain a statistical power of 80\%, what happens if the plausible effect size is slightly larger or smaller? The necessary sample size would spike to 344 for a $\rho=.15$  and decrease to 60 for $\rho=.35$. In both scenarios, the Type M error remains about 1.12, which reflects the more general point that for 80\% power, Type M error is around 1.10. In all these scenario, Type S error is close to zero, hence not worrisome.
+
+
+
+<<Data_table_pro_r>>=
 rho_list <-  list(.25, .15, .35)
 power_list <- list(.60, .80, .80)
 
@@ -327,14 +343,14 @@ data_table <- map2(rho_list, power_list, pro_r, alternative = "two.sided", sig_l
 
 data_table %>%
   filter(duplicated(rho)) %>%
-  mutate_at(vars(typeM:min_sig_r), round, 3) %>%
+  mutate_at(vars(typeM:crit_r), round, 3) %>%
   mutate(power=round(power,1),
-         min_sig_r = paste0("$\\pm",min_sig_r,"$")) %>%
-  dplyr::select(rho, power, n, typeM, typeS, min_sig_r) %>%
-  kable(.,"latex", booktabs=T,align = "c",col.names = c("$\\bm{\\rho}$", "Power", "Sample Size", "Type M", "Type S", "Minimum sign. \\textit{r}"),caption = "Prospective design analysis in different scenarios of plausible effect size and statistical power.", escape = FALSE) %>%
+         crit_r = paste0("$\\pm",crit_r,"$")) %>%
+  dplyr::select(rho, power, n, typeM, typeS, crit_r) %>%
+  kable(.,"latex", booktabs=T,align = "c",col.names = c("$\\bm{\\rho}$", "Power", "Sample Size", "Type M", "Type S", "Critical \\textit{r} value"),caption = "Prospective design analysis in different scenarios of plausible effect size and statistical power.", escape = FALSE) %>%
   row_spec(0,bold = T, align = "c") %>%
-  kable_styling(position = "center", latex_options = "HOLD_position")
-  #footnote(general = "",footnote_as_chunk = T,escape=F)
+  kable_styling(position = "center", latex_options = "HOLD_position")%>%
+  footnote(general = 'In all cases, alternative  = \\\\texttt{"two.sided"} and sig\\\\_level = .05.',footnote_as_chunk = T,escape=F)
 
 @
 
@@ -342,9 +358,238 @@ For completeness, Figure~\ref{fig:Plot_scenarios} summarizes the relationship be
 
 At first, it might seem that Type M and Type S errors are redundant with the information provided by statistical power. Even though they are related, we believe that Type M and Type S errors bring added value during the design phase of a research protocol because they facilitate a connection between how a study is planned and how results will actually be evaluated. That is to say, final results will comprise of a test statistics with an associated p-value and effect size measure. If the interest is maximizing the accuracy with which effects will be estimated, then Type M and Type S errors directly communicate the consequences of design choices on effect size estimation.
 
+<<Data_plot_scenarios, eval = F>>=
+conditions <- expand.grid(rho = c(.25, .50, .75),
+                          n = c(3:20,seq(from=22, to=40, by=2),seq(from=45, to=100, by=5), seq(from=110, to=200, by=10),250,300,500))
+conditions$B <- c(rep(7e5, 3),rep(5e4, 150))
+
+
+data_conditions <- mapply(retro_r, conditions$rho,  conditions$n, B = conditions$B, seed=2020)
+
+data_conditions <- data_conditions%>%
+  t()%>%
+  as.data.frame()
+
+@
+
+<<Plot_scenarios, fig.pos="H", fig.align="center",message=F, warning=F,error=F, fig.height=6, fig.width=6.5, fig.cap="How Type M, Type S and Statistical power vary as a function of sample size in three different scenarios of plausible effect size ($\\rho=.25$, $\\rho=.50$, $\\rho=.75$). Note that, for the sake of interpretability, we decided to use different scales for both the x-axis and y-axis in the three scenarios of plausible effect size." >>=
+
+load("../../Data/data_conditions.rda")
+
+data_conditions <- data_conditions %>%
+  pivot_longer(power:typeS, names_to = "index", values_to = "value") %>%
+  mutate_at(c("rho","index"), factor)%>%
+  filter((rho==.25 & n<=200)|
+         (rho==.50 & n<=100)|
+         (rho==.75 & n<=40))
+
+plot_list <- expand.grid(rho = c(.25, .5, .75),
+                         index = c("power","typeM","typeS"))
+
+plot_fun <- function(x,y){
+  plot <- data_conditions %>%
+  filter(rho==x & index==y)%>%
+  ggplot()+
+  geom_line(aes(n, value), stat = "smooth", span=.2)+
+  theme(axis.title.y = element_blank())
+
+  if(y=="power"){
+  plot = plot+
+    scale_y_continuous(breaks = seq(0,1,by=.2), limits = c(0,1),
+                       labels = paste0(" ",format(seq(0,1,by=.2),nsmall = 1)))+
+    geom_hline(aes(yintercept=.8), linetype=5)+
+    geom_hline(aes(yintercept=.6), linetype=5)
+  }
+
+  if(y=="typeM"){
+    if(x==.25) span = 4
+    if (x==.5) span = 2
+    if(x==.75) span = 1.3
+  plot = plot+
+    geom_hline(aes(yintercept=1), linetype=5)+
+    scale_y_continuous(breaks = seq(1,span,length.out = 6))
+  }
+
+  if(y=="typeS"){
+    if(x==.25) span = .3
+    if (x==.5) span = .15
+    if(x==.75) span = .05
+    plot = plot +
+      scale_y_continuous(breaks = seq(0,span,length.out = 6),limits = c(-0.0001, NA))
+  }
+
+  return(plot)
+}
+
+plots <- map2(plot_list$rho,plot_list$index,plot_fun)
+
+plots <- lapply(plots,ggplotGrob)
+
+col1 <- rbind(plots[[1]], plots[[4]],plots[[7]], size = "first")
+col1$widths <- unit.pmax(plots[[1]]$widths, plots[[4]]$widths, plots[[7]]$widths)
+col2 <- rbind(plots[[2]], plots[[5]],plots[[8]], size = "first")
+col2$widths <- unit.pmax(plots[[2]]$widths, plots[[5]]$widths, plots[[8]]$widths)
+col3 <- rbind(plots[[3]], plots[[6]],plots[[9]], size = "first")
+col3$widths <- unit.pmax(plots[[3]]$widths, plots[[6]]$widths, plots[[9]]$widths)
+
+g <- cbind(col1,col2,col3)
+
+#  New strip at the top
+g <- gtable_add_rows(g, unit(12/10, "line"), pos = 6)  # New row added
+g <- gtable_add_cols(g, unit(12/10, "line"), pos = 3)  # New column added
+
+# Add small gap between strips
+g <- gtable_add_rows(g, unit(2/10, "line"), 7)
+# Add small gap between strips
+g <- gtable_add_cols(g, unit(2/10, "line"), 4)
+
+
+# Add labels top
+add_lables <- function(plot, lable_text, rot=0,t,l,b,r){
+  plot <- gtable_add_grob(plot,
+       textGrob(lable_text, rot = rot, gp = gpar(cex = 1, fontface = 'bold', col = "black",size=22)),
+  t=t, l=l, b=b, r=r, name = c("lable_text"))
+  return(plot)
+}
+
+g <- add_lables(g,"$\\bm{\\rho=.25}$",t=7, l=7, b=7, r=7)
+g <- add_lables(g,"$\\bm{\\rho=.50}$",t=7, l=16, b=7, r=16)
+g <- add_lables(g,"$\\bm{\\rho=.75}$",t=7, l=25, b=7, r=25)
+
+g <- add_lables(g,"Power",rot=90,t=9, l=4, b=9, r=4)
+g <- add_lables(g,"Type M",rot=90,t=21, l=4, b=21, r=4)
+g <- add_lables(g,"Type S",rot=90,t=33, l=4, b=33, r=4)
+
+grid.newpage()
+grid.draw(g)
+@
+
+%----------------------------------------------------------------------------------%
+%------        Varying $\alpha$ levels and Hypotheses Directionality         ------%
+%----------------------------------------------------------------------------------%
+
+\section{Varying $\alpha$ levels and Hypotheses Directionality}
+
+So far, we did not discuss two other important decisions that researchers have to take when designing a study: statistical significance threshold or $\alpha$ level, and directionality of the statistical test, one-tailed or two-tailed. In this section we illustrate how different choices regarding these aspects impact Type M and Type S errors.
+
+A lot has been written regarding the automatic adoption of a conventional $\alpha$ level of 5\% \citep[e.g.,][]{gigerenzerNullRitualWhat2004, lakensJustifyYourAlpha2018}. This practice is increasingly discouraged, and researchers are invited to think about the best trade-off between $\alpha$ level and statistical power, considering the aim of the study and available resources. The $\alpha$ level impacts Type M and Type S errors as much as it impacts statistical power. Everything else equal, Type M error increases with decreasing $\alpha$ level (i.e., negative relationship), whereas Type S error decreases with decreasing $\alpha$ level (i.e., positive relationship). To further illustrate the relation between Type M error and $\alpha$ level, let us take as an example the previous case study with a sample of 13 participants, plausible effect size $\rho=.25$ and two-tailed test. Table~\ref{tab:Table_alpha} shows that by lowering the $\alpha$ level from 10\% to .10\%, the critical values move from \todo{$\rho=\pm .48$  to $\rho=\pm .80$}. This suggests that, with these new higher thresholds, the exaggeration of effects will be even more pronounced because effects have to be even larger to pass such higher critical values. Instead, the relationship between Type S error and $\alpha$ level can be clarified thinking that by lowering the statistical significance threshold, we are being more conservative to falsely reject the null hypothesis in general which implies that we are also being more conservative to falsely rejecting the null hypothesis in the wrong direction.
+
+<<Data_table_alpha>>=
+alpha_list <-  list( .1, .05, .01, .005, .001)
+
+data_table2 <- map(alpha_list, retro_r, rho =.25,  n = 13, alternative = "two.sided", seed = 2020)%>%
+  map_df(., ~as.data.frame(.))
+@
+
+<<Table_alpha>>=
+
+data_table2 %>%
+  filter(duplicated(sig_level)) %>%
+  mutate_at(vars(typeM:crit_r), round, 3) %>%
+  mutate(power=round(power,1),
+         crit_r = paste0("$\\pm",crit_r,"$")) %>%
+  dplyr::select(sig_level, power, typeM, typeS, crit_r) %>%
+  kable(.,"latex", booktabs=T,align = "c",col.names = c("$\\bm{\\alpha}$-level", "Power", "Type M", "Type S", "Critical \\textit{r} value"),caption = "How changes in $\\alpha$ level impact Power, Type M error, Type S error and critical values.", escape = FALSE) %>%
+  row_spec(0,bold = T, align = "c") %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")%>%
+  footnote(general = 'In all cases, n = 13 and alternative  = \\\\texttt{"two.sided"}.',footnote_as_chunk = T,escape=F)
+
+@
+
+Another important choice in study design is the directionality of the test (i.e., one-tailed or two-tailed).  Design analysis invites reasoning on the plausible effect size and hypothesizing the direction of the effect, not only its magnitude. So why should a researcher perform nondirectional statistical tests when there is a hypothesized direction? Performing a two-tailed test leaves open the possibility to find an unexpected result in the opposite direction \citep{cohenStatisticalPowerAnalysis1988}, a possibility which may be of special interest for preliminary exploratory studies. However, in more advanced stages of a research program (i.e., confirmatory study), directional hypotheses benefit from higher statistical power and lower Type M error rates (Figure~\ref{fig:Plot_hypothesis}). As an example, let us consider the differences between a two-tailed test and a one-tailed test in the previous case study. We can perform a new prospective design analysis (Figure~\ref{fig:pro_r2}) with plausible correlation of $\rho=.25$, 80\% statistical power, but this time setting the argument \texttt{alternative} in the R function to \texttt{“greater”}. A comparison of the two prospective design analyses, \todo{Figure~\ref{fig:pro_r} and Figure~\ref{fig:pro_r2}}, suggests that the same Type M error rate of about 10\% is guaranteed with 94 participants, instead of 125 subjects. Note that, Type S error is not possible in directional statistical tests. Indeed, all the statistically significant results are obtainable only in the hypothesized direction, not the opposite one.
+
+<<Data_plot_hypothesis, eval = F>>=
+
+n_list <- data.frame(n = c(3:20,seq(from=22, to=40, by=2),seq(from=45, to=100, by=5), seq(from=110, to=200, by=10),250,300,500))
+n_list$B <- c(rep(7e5, 3),rep(5e4, 50))
+
+data_hypothesis <- mapply(retro_r, rho = .25, n = n_list$n,
+                                 alternative ="greater", B = n_list$B, seed=2020)
+
+data_hypothesis <- data_hypothesis%>%
+  t()%>%
+  as.data.frame()%>%
+  mutate_at(vars("rho":"typeS"),unlist)
+
+data_hypothesis<- data_conditions %>%
+  filter(rho == .25)%>%
+  rbind(data_hypothesis)
+@
+
+<<Plot_hypothesis, fig.pos="H", fig.align="center",message=F, warning=F,error=F, fig.height=3, fig.width=6.5, fig.cap="Comparison of Type M error rate and Power level between one tailed and two tailed test with $\\rho = .25$, $\\alpha = .05$. n = sample size. " >>=
+
+load("../../Data/data_hypothesis.rda")
+
+data_hypothesis <- data_hypothesis %>%
+  filter(n<=200)%>%
+  mutate(alternative=factor(alternative, levels = c("two.sided","greater"),
+                            labels = c("Two-tailed test","One-tailed test")))
+
+
+p1 <- ggplot(data_hypothesis)+
+  geom_line(aes(n, power, linetype=alternative, col=alternative), size=1, stat="smooth")+
+  geom_hline(aes(yintercept=.8), linetype="dotted")+
+  geom_hline(aes(yintercept=.6), linetype="dotted")+
+  scale_linetype_manual(values = c(1,5))+
+  scale_y_continuous(breaks = seq(0,1, length.out = 6), limits = c(0,1))+
+  labs(y="Power")+
+  theme(legend.position = "none",
+        legend.direction = "horizontal",
+        legend.title = element_blank())
+
+p2 <- ggplot(data_hypothesis)+
+  geom_line(aes(n, typeM, linetype=alternative, col=alternative), size=1)+
+  geom_hline(aes(yintercept=1), linetype="dotted")+
+  scale_linetype_manual(values = c(1,5))+
+  scale_y_continuous(breaks = seq(1,4, length.out = 6))+
+  labs(y="Type M")+
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank())
+
+legend <- get_legend(p2)
+p2 <- p2+theme(legend.position="none")
+
+p <- arrangeGrob(p1,p2,ncol = 2)
+p <- arrangeGrob(legend,p, ncol=1,heights = c(.1,1))
+
+grid.newpage()
+grid.draw(p)
+@
+
+
+<<example_pro_r2, eval=F>>=
+pro_r(rho = .25, power = .8, alternative = "greater", sig_level = .05, seed = 2020)
+@
+
+\begin{figure}[H]
+\centering
+  \includegraphics[height=5cm]{screens/pro2}
+\caption{Input and Output of the function \texttt{pro\_r()} for prospective design analysis. Plausible correlation coefficient is $\rho = .25$, statistical power is 80\% and the statistical test is one-tailed.}\label{fig:pro_r2}
+\end{figure}
+
+Valid conclusions require decisions on test directionality and $\alpha$ level to be taken a priori, not while data are being analyzed \citep{cohenStatisticalPowerAnalysis1988}. These decisions can take place during a prospective design analysis, which aligns with the increasing interest in psychological science to transparently communicate and justify design choices through studies’ preregistration in public repositories (e.g., Open Science Framework; Aspredicted.com). Preregistration of studies’ protocol is particularly valuable for researchers endorsing an error statistics philosophy of science, where the evaluation of research results takes into account the severity with which claims are tested \citep{lakensValuePreregistrationPsychological2019,mayoStatisticalInferenceSevere2018}. Severity depends on the degree with which a research protocol tries to falsify a claim. For example, a one-tailed statistical test provides greater severity than a two-tailed statistical test. As noted by \citet{lakensValuePreregistrationPsychological2019}, preregistration is important to openly share a priori decisions, such as test-directionality, providing valuable information for researchers interested in evaluating the severity of research claims.
+
+%----------------------------------------------------------------------------------%
+%--------------------         Discussion and Conclusion         -------------------%
+%----------------------------------------------------------------------------------%
+
+\section{Discussion and Conclusion}
+
+In the scientific community, it is quite widespread the idea that the literature is affected by a problem with effect size exaggeration. This issue is usually explained in terms of studies’ low statistical power combined with the use of thresholds of statistical significance \citep{buttonPowerFailureWhy2013,ioannidisWhyMostDiscovered2008,ioannidisEmergenceLargeTreatment2013,laneEstimatingEffectSize1978,yarkoniBigCorrelationsLittle2009,youngWhyCurrentPublication2008}. Statistically significant results can be obtained even in underpowered studies and it is precisely in these cases that we should worry the most about issues of overestimation. Type M and Type S errors quantify and highlight the inferential risks directly in terms of effect size estimation, which are implied by the concept of statistical power, but might not be recognizable outright. So far, only a handful of papers explicitly mentioned Type M and Type S errors \citep{altoeEnhancingStatisticalInference2020,gelmanFailureNullHypothesis2018,gelmanTypeErrorMight2017,gelmanRetrospectiveDesignAnalysis2013,gelmanPowerCalculationsAssessing2014,gelmanTypeErrorRates2000,luNoteTypeErrors2018,vasishthStatisticalSignificanceFilter2018}. With the broader goal of facilitating their consideration in psychological science, in the present contribution we illustrated how Type M and Type S errors are considered in a design analysis using one of the most common effect size measures in psychology, Pearson correlation coefficient.
+
+Peculiar to design analysis is the focus on the implications of design choices on effect sizes estimation rather than statistical significance only. We illustrated how Type M and Type S errors can be prevented with a \emph{prospective design analysis}. In the planning stage of a research project, design analysis has the potential to increase researchers’ awareness of the consequences that their sample size choices have on uncertainty about final estimates of the effects. This favors reasoning in similar terms to those in which results will be evaluated, that is to say, effect size estimation. But understanding the inferential risks in a study design is also beneficial once results are obtained. We presented \emph{retrospective design analysis} on a published study, and the same process can be useful for studies in general, especially those ending without the necessary sample size to maximize statistical power and minimize Type M and Type S errors. In all cases, presenting their values, effectively communicates the uncertainty of the results. In particular, Type M and Type S errors put a red flag when results are statistically significant, but the effect size could be largely overestimated and in the wrong direction. Finally, both prospective and retrospective design analysis favors cumulative science encouraging the incorporation of expert knowledge in the definition of the plausible effect sizes.
+
+To make design analysis accessible to the research community, we provide the R functions to perform prospective design analysis and retrospective design analysis for Pearson correlation coefficient \todo{(link)} together with a short guide on how to use the R functions and a summary of the examples presented in this contribution \todo{(Appendix B)}.
+
+\todo{Aggiunta revisione Altoè}
+
+Choices regarding studies’ design impact effect size estimation. Type M (magnitude) error and Type S (sign) error directly quantify these inferential risks. Their consideration in a prospective design analysis increases awareness of what are the consequences of sample size choice reasoning in similar terms to those used in results evaluation. Instead, retrospective design analysis provides further guidance on interpreting research results. More broadly, design analysis reminds researchers that statistical inference should start before data collection and does not end when results are obtained.
+
 \clearpage
 
-
+\todo{rivedere numerazione paragrafi e sottoparagrafi\\
+}
 %----------------------------------------------------------------------------------%
 %--------------------------    Session Information   ------------------------------%
 %----------------------------------------------------------------------------------%
@@ -354,6 +599,8 @@ At first, it might seem that Type M and Type S errors are redundant with the inf
 
 <<Session Info, echo=T>>=
   sessionInfo(package = NULL)
+
+
 @
 
 \clearpage
