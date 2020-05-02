@@ -68,7 +68,8 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
   #' function \code{retro_r()} performs a retrospective design analysis
   #' according to the defined alternative hypothesis and significance level.
   #' Power level, Type-M error, and Type-S error are computed together with the
-  #' minimum correlation value that would result significant.
+  #' the critical correlation value (i.e., the minimum absolute correlation
+  #' value that would result significant).
   #'
   #' @param rho a number indicating the hypothetical population correlation value.
   #' @param n a numeric value indicating the sample size.
@@ -91,10 +92,10 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
   #'   \item{power}{the resulting power level.}
   #'   \item{typeM}{the resulting Type-M error.}
   #'   \item{typeS}{the resulting Type-S error.}
-  #'   \item{min_sig_r}{the minimum correlation coefficient value
-  #'   that would result significant. In the case of \code{alternative =
-  #'   "two.sided"}, two values are returned with the positive and negative
-  #'   sign.}
+  #'   \item{crit_r}{the critical correlation value (i.e., the minimum absolute
+  #'   correlation value that would result significant). In the case of
+  #'   \code{alternative = "two.sided"}, two values are returned with the
+  #'   positive and negative sign.}
   #'
   #' @references Gelman, A., & Carlin, J. (2014). Beyond Power Calculations:
   #'  Assessing Type S (Sign) and Type M (Magnitude) Errors. Perspectives on
@@ -137,12 +138,12 @@ retro_r<-function(rho, n, alternative = c("two.sided", "less", "greater"), sig_l
   }
   typeM <- mean(abs(r_sim[p_val < sig_level])) / abs(rho)
 
-  # minimum significant r
-  min_sig_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n)
+  # critical r
+  crit_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n)
 
   # Result object
   out<-structure(list(rho = rho, n = n,  alternative = alternative, sig_level = sig_level,
-                      power = power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r),
+                      power = power, typeM = typeM, typeS = typeS, crit_r = crit_r),
                  class = c("design_analysis","list"))
 
   return(out)
@@ -159,8 +160,8 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
   #' level, the function \code{pro_r()} performs a prospective design analysis
   #' according to the defined alternative hypothesis and significance level. The
   #' required sample size is computed together with the associated Type-M error,
-  #' Type-S error, and the minimum correlation value that would result
-  #' significant.
+  #' Type-S error, and the the critical correlation value (i.e., the minimum
+  #' absolute correlation value that would result significant).
   #'
   #' @param rho a number indicating the hypothetical population correlation value.
   #' @param power a numeric value indicating the required power level.
@@ -188,10 +189,10 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
   #'   \item{power}{the resulting power level.}
   #'   \item{typeM}{the resulting Type-M error.}
   #'   \item{typeS}{the resulting Type-S error.}
-  #'   \item{min_sig_r}{the minimum correlation coefficient value
-  #'   that would result significant. In the case of \code{alternative =
-  #'   "two.sided"}, two values are returned with the positive and negative
-  #'   sign.}
+  #'   \item{crit_r}{the critical correlation value (i.e., the minimum absolute
+  #'   correlation value that would result significant). In the case of
+  #'   \code{alternative = "two.sided"}, two values are returned with the
+  #'   positive and negative sign.}
   #'
   #' @references Gelman, A., & Carlin, J. (2014). Beyond Power Calculations:
   #'  Assessing Type S (Sign) and Type M (Magnitude) Errors. Perspectives on
@@ -277,11 +278,11 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
     typeM <- mean(abs(r_sim[p_val < sig_level])) / abs(rho)
 
     # mean sig
-    min_sig_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n_target)
+    crit_r = compute_crit_r(alternative = alternative, sig_level = sig_level, n = n_target)
 
     # Result object
     out <- structure(list( rho = rho, n = n_target, alternative = alternative, sig_level = sig_level,
-                           power = est_power, typeM = typeM, typeS = typeS, min_sig_r = min_sig_r),
+                           power = est_power, typeM = typeM, typeS = typeS, crit_r = crit_r),
                      class = c("design_analysis","list"))
   }
   if (!is.null(out))  return(out)
@@ -340,7 +341,7 @@ print.design_analysis <- function(DA_list, prefix="\t"){
         output_text[c("power", "typeM", "typeS")]))),
         print.gap = 3, right = F, row.names = F)), sep = '\n')
   cat("\n")
-  cat("Minimum significant r = ", output_text$min_sig_r)
+  cat("Critical value: r = ", output_text$crit_r)
 
   invisible(DA_list)
 }

@@ -14,3 +14,17 @@ sample_rho <- function(rho = 0, n = 30, B = 10000){
 
   return(rho_sim)
 }
+
+#----    get_legend    ----
+
+get_legend<-function(myggplot){
+  tmp <- ggplot_gtable(ggplot_build(myggplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+#----
+
+
+
