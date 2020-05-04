@@ -13,5 +13,5 @@ In the folder [Documents](Documents/) you can find:
 
 In the folder [R](R/) you can find the scripts:
 
-- [Design_analysis_r.R](R/Design_analysis_r): source code of the functions for Design Analysis of Pearson correlation coefficient 
+- [Design_analysis_r.R](R/Design_analysis_r.R): source code of the functions for Design Analysis of Pearson correlation coefficient 
 - Oter scrips for plot or trials
