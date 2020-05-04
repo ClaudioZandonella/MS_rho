@@ -1,5 +1,5 @@
 ---
-title: "Appendix B: R Functions for Design Analysis Pearson Correlation"
+title: "Appendix B: R Functions for Design Analysis with Pearson Correlation"
 author: 
 date:
 bibliography: Appendix_B.bib 
@@ -38,7 +38,7 @@ retro_r(rho, n, alternative = c("two.sided", "less", "greater"),
 - `pro_r()` for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the minimum correlation value that would result significant. 
 ```{r, eval=FALSE}
 pro_r(rho, power = .80, alternative = c("two.sided", "less", "greater"), 
-      sig_level = .05, range_n = c(1,1000), B = 1e4, tol = .005, 
+      sig_level = .05, range_n = c(1,1000), B = 1e4, tol = .01, 
       display_message = TRUE, seed = NULL)
 ```
 
@@ -47,6 +47,5 @@ For further details about function arguments, run the line `docstring(retro_r)` 
 
 **Note:** a third function is defined in the script (i.e., `compute_crit_r()`). This is an internal function that should not be used by the user.
 
-## Examples code
 
 ## References

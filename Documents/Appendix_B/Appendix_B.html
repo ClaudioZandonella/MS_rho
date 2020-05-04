@@ -13,7 +13,7 @@
 <meta name="author" content />
 
 
-<title>Appendix B: R Functions for Design Analysis Pearson Correlation</title>
+<title>Appendix B: R Functions for Design Analysis with Pearson Correlation</title>
 
 
 
@@ -300,7 +300,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Appendix B: R Functions for Design Analysis Pearson Correlation</h1>
+<h1 class="title toc-ignore">Appendix B: R Functions for Design Analysis with Pearson Correlation</h1>
 
 
 
@@ -320,13 +320,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>pro_r()</code> for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the minimum correlation value that would result significant.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">pro_r</span>(rho, <span class="dt">power =</span> <span class="fl">.80</span>, <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;greater&quot;</span>), </span>
-<span id="cb2-2"><a href="#cb2-2"></a>      <span class="dt">sig_level =</span> <span class="fl">.05</span>, <span class="dt">range_n =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1000</span>), <span class="dt">B =</span> <span class="fl">1e4</span>, <span class="dt">tol =</span> <span class="fl">.005</span>, </span>
+<span id="cb2-2"><a href="#cb2-2"></a>      <span class="dt">sig_level =</span> <span class="fl">.05</span>, <span class="dt">range_n =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1000</span>), <span class="dt">B =</span> <span class="fl">1e4</span>, <span class="dt">tol =</span> <span class="fl">.01</span>, </span>
 <span id="cb2-3"><a href="#cb2-3"></a>      <span class="dt">display_message =</span> <span class="ot">TRUE</span>, <span class="dt">seed =</span> <span class="ot">NULL</span>)</span></code></pre></div>
 <p>For further details about function arguments, run the line <code>docstring(retro_r)</code> or <code>docstring(pro_r)</code>. This creates a documentation similar to the help pages of R functions.</p>
 <p><strong>Note:</strong> a third function is defined in the script (i.e., <code>compute_crit_r()</code>). This is an internal function that should not be used by the user.</p>
-</div>
-<div id="examples-code" class="section level2">
-<h2>Examples code</h2>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>
