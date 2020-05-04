@@ -3,7 +3,7 @@
 \documentclass{article}
 \usepackage[T1] {fontenc} 		  % Font encoding
 \usepackage [utf8] {inputenc}		% Encoding for the document
-\usepackage[a4paper,includeheadfoot,margin=3cm]{geometry}  % margin settings
+\usepackage[a4paper,includeheadfoot,left=3cm, right=3cm, top=3cm, bottom=3cm]{geometry}  % margin settings
 \usepackage[english]{babel}
 
 
@@ -37,6 +37,7 @@
 \usepackage[labelfont=bf]{caption}  % caption
 \usepackage{lineno}                 % rows number
 \usepackage[doublespacing]{setspace}% line spacing
+\usepackage{titlesec}               % redefine title format for appendix
 % \usepackage[style=apa, backend=biber]{biblatex}  % bibliografia
 % \addbibresource{Paper_main.bib}
 \usepackage[natbibapa]{apacite}
@@ -65,7 +66,11 @@
 	\hspace{-2mm}
 }
 
-% %----    LaTeX Settings    ----%
+%----    Appendix section title    ----%
+
+\newcommand{\setappendix}{Appendix~\thesection:~}
+
+%----    LaTeX Settings    ----%
 
 \newcommand{\textstreach}{\renewcommand{\baselinestretch}{1.6}}{} % default line stretch
 \newcommand{\codestreach}{\renewcommand{\baselinestretch}{1}}{}   % code line streach
@@ -236,7 +241,7 @@ The central and possibly most difficult point in this process is reasoning on wh
 
 Researchers can consider Type M and Type S errors in their practice by performing a \emph{design analysis} \citep{altoeEnhancingStatisticalInference2020, gelmanPowerCalculationsAssessing2014}. Ideally, a design analysis should be performed when designing a study. In this phase it is specifically called \emph{prospective design analysis} and it can be used as a sample size planning strategy where statistical power is considered together with Type M and Type S errors. However, design analysis can also be beneficial to evaluate the inferential risks in studies that have already been conducted and where the study design is known. In these cases, Type M and Type S errors can support results interpretation by communicating the inferential risks in that research design. When design analysis happens at this later stage, it takes the name of \emph{retrospective design analysis}.
 
-In the following sections we illustrate how to perform prospective and retrospective design analysis using some examples. We developed two R functions to perform design analysis for Pearson correlation, which are available at the page \todo{…} . The function to perform a prospective design analysis is \texttt{pro\_r()}. It requires as input the plausible effect size (\texttt{rho}), the statistical power (\texttt{power}) the directionality of the test (\texttt{alternative}) which can be set as: “\texttt{two.sided}”, “\texttt{less}” or “\texttt{greate}r” . Type I error rate (\texttt{sig\_level}) is set as default at 5\% and can be changed by the user. The \texttt{pro\_r()} function returns the necessary sample size to achieve the desired statistical power, Type M error rate, the Type S error probability, and the critical value(s) above which a statistically significant result can be found. The function to perform retrospective design analysis is \texttt{retro\_r()}. It requires as input the plausible effect size, the sample size used in the study, and the directionality of the test that was performed. Also in this case, Type I error rate is set as default at 5\% and can be changed by the user.  The function \texttt{retro\_r()} returns the Type M error rate, the Type S error probability, and the critical value(s). \todo{For further details on (how to use)computational aspects regarding the R functions, we refer to Appendix A.}
+In the following sections we illustrate how to perform prospective and retrospective design analysis using some examples. We developed two R functions to perform design analysis for Pearson correlation, which are available at the page \todo{…} . The function to perform a prospective design analysis is \texttt{pro\_r()}. It requires as input the plausible effect size (\texttt{rho}), the statistical power (\texttt{power}) the directionality of the test (\texttt{alternative}) which can be set as: “\texttt{two.sided}”, “\texttt{less}” or “\texttt{greate}r” . Type I error rate (\texttt{sig\_level}) is set as default at 5\% and can be changed by the user. The \texttt{pro\_r()} function returns the necessary sample size to achieve the desired statistical power, Type M error rate, the Type S error probability, and the critical value(s) above which a statistically significant result can be found. The function to perform retrospective design analysis is \texttt{retro\_r()}. It requires as input the plausible effect size, the sample size used in the study, and the directionality of the test that was performed. Also in this case, Type I error rate is set as default at 5\% and can be changed by the user.  The function \texttt{retro\_r()} returns the Type M error rate, the Type S error probability, and the critical value(s). \todo{For further details on (how to use)computational aspects regarding the R functions, we refer to Appendix~\ref{sec:appendix_a}.}
 
 %----------------------------------------------------------------------------------%
 %---------------------------         Case Study         ---------------------------%
@@ -268,7 +273,7 @@ We can use the R function \texttt{retro\_r()}, which inputs and outputs are disp
 retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 2020)
 @
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
   \includegraphics[height=5cm]{screens/retro}
 \caption{Input and Output of the function \texttt{retro\_r()} for retrospective design analysis. Case study: \citet{eisenbergerDoesRejectionHurt2003}. The plausible correlation coefficient is $\rho = .25$, the sample size is 13, and the statistical test is two-tailed.}\label{fig:retro_r}
@@ -276,20 +281,21 @@ retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 20
 
 In this research design, the critical values above which a statistically significant result is declared correspond to $\rho=\pm .55$ (Figure~\ref{fig:retro_r}).  These values are highlighted in Figure~\ref{fig:Plot_winner} as the vertical lines in the sampling distribution of correlation coefficients under the null hypothesis. Notice that the plausible effect size lies in the region of acceptance of the null hypothesis. Therefore, it is impossible to simultaneously find a statistically significant result and estimate an effect close to the plausible one ($\rho=.25$). The figure represents the so called Winner’s curse: “the ‘lucky’ scientist who makes a discovery is cursed by finding an inflated estimate of that effect” \citep{buttonPowerFailureWhy2013}.
 
-
-<<Plot_winner, fig.pos="H", fig.align="center", fig.height=3, fig.width=5, fig.cap="Winner's course. H$_0$ = Null Hypothesis, H$_1$ = Alternative Hypothesis. When sample size, directionality of the test and Type error probability are set, also the smallest effect size above which is possible to find a statistically significant result is set. In this case, the plausible effect size, $\\rho=.25$, lies in the region where it is not possible to reject H$_0$. Thus, it is impossible to simultaneously find a statistically significant result and an effect close to the plausible one. In other words, a statistically significant effect must exaggerate the plausible effect size.", fig.scap="Winner's course">>=
-
+<<data_plot_winner>>=
 des_fit <- retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 2020)
 
 data_plot1 <- data.frame(
   hypothesis = factor(rep(c("HO","H1"), each=1e5+2), levels = c("HO","H1"),
-                      labels=c("$H_0$","$H_1$")),
+                      labels=c("$H_0:\\ \\rho=0$","$H_1:\\ \\rho=.25$")),
   rho = c(-1,1,sample_rho(0,n=13, B = 1e5),
           -1,1,sample_rho(.25,n=13, B = 1e5)))
+@
+
+<<Plot_winner, fig.pos="!h", fig.align="center", fig.height=3, fig.width=4.5, fig.cap="Winner's course. H$_0$ = Null Hypothesis, H$_1$ = Alternative Hypothesis. When sample size, directionality of the test and Type error probability are set, also the smallest effect size above which is possible to find a statistically significant result is set. In this case, the plausible effect size, $\\rho=.25$, lies in the region where it is not possible to reject H$_0$. Thus, it is impossible to simultaneously find a statistically significant result and an effect close to the plausible one. In other words, a statistically significant effect must exaggerate the plausible effect size.", fig.scap="Winner's course">>=
 
 ggplot(data_plot1)+
   stat_density(aes(rho, col=hypothesis, linetype=hypothesis),
-               geom="line", size = 1, position="identity", bw = .1)+
+               geom="line", size = 1.2, position="identity", bw=.1)+
   geom_vline(xintercept = des_fit$crit_r)+
   scale_linetype_manual(values = c(1,2))+
   scale_x_continuous(breaks = seq(-1, 1, by = .2))+
@@ -298,8 +304,10 @@ ggplot(data_plot1)+
        y=" ",
        linetype = "Hypotheses",
        col = "Hypotheses")+
-  guides(colour = guide_legend(override.aes = list(size = .7 )))+
+  guides(colour = guide_legend(override.aes = list(size = 1.2 )))+
   theme(legend.key.size = unit(.5, "cm"),
+        legend.title = element_blank(),
+        legend.position = "top",
         axis.line.y = element_blank(),
         axis.ticks.y = element_blank(),
         axis.text.y = element_blank())
@@ -321,7 +329,7 @@ We can implement the prospective design analysis using the function \texttt{pro\
 pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
 @
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
   \includegraphics[height=5cm]{screens/pro}
 \caption{Input and Output of the function \texttt{pro\_r()} for prospective design analysis. Plausible correlation coefficient is $\rho = .25$, statistical power is 80\% and the statistical test is two-tailed.}\label{fig:pro_r}
@@ -372,7 +380,7 @@ data_conditions <- data_conditions%>%
 
 @
 
-<<Plot_scenarios, fig.pos="H", fig.align="center",message=F, warning=F,error=F, fig.height=6, fig.width=6.5, fig.cap="How Type M, Type S and Statistical power vary as a function of sample size in three different scenarios of plausible effect size ($\\rho=.25$, $\\rho=.50$, $\\rho=.75$). Note that, for the sake of interpretability, we decided to use different scales for both the x-axis and y-axis in the three scenarios of plausible effect size." >>=
+<<Plot_scenarios, fig.pos="!h", fig.align="center",message=F, warning=F,error=F, fig.height=6, fig.width=6.5, fig.cap="How Type M, Type S and Statistical power vary as a function of sample size in three different scenarios of plausible effect size ($\\rho=.25$, $\\rho=.50$, $\\rho=.75$). Note that, for the sake of interpretability, we decided to use different scales for both the x-axis and y-axis in the three scenarios of plausible effect size." >>=
 
 load("../../Data/data_conditions.rda")
 
@@ -390,15 +398,16 @@ plot_fun <- function(x,y){
   plot <- data_conditions %>%
   filter(rho==x & index==y)%>%
   ggplot()+
-  geom_line(aes(n, value), stat = "smooth", span=.2)+
+  geom_line(aes(n, value), stat = "smooth", span=.2, size=1.2)+
+  scale_x_continuous(limits = c(0, NA))+
   theme(axis.title.y = element_blank())
 
   if(y=="power"){
   plot = plot+
     scale_y_continuous(breaks = seq(0,1,by=.2), limits = c(0,1),
                        labels = paste0(" ",format(seq(0,1,by=.2),nsmall = 1)))+
-    geom_hline(aes(yintercept=.8), linetype=5)+
-    geom_hline(aes(yintercept=.6), linetype=5)
+    geom_hline(aes(yintercept=.8), linetype="dotted")+
+    geom_hline(aes(yintercept=.6), linetype="dotted")
   }
 
   if(y=="typeM"){
@@ -406,7 +415,7 @@ plot_fun <- function(x,y){
     if (x==.5) span = 2
     if(x==.75) span = 1.3
   plot = plot+
-    geom_hline(aes(yintercept=1), linetype=5)+
+    geom_hline(aes(yintercept=1), linetype="dotted")+
     scale_y_continuous(breaks = seq(1,span,length.out = 6))
   }
 
@@ -516,7 +525,7 @@ data_hypothesis<- data_conditions %>%
   rbind(data_hypothesis)
 @
 
-<<Plot_hypothesis, fig.pos="H", fig.align="center",message=F, warning=F,error=F, fig.height=3, fig.width=6.5, fig.cap="Comparison of Type M error rate and Power level between one tailed and two tailed test with $\\rho = .25$, $\\alpha = .05$. n = sample size. " >>=
+<<Plot_hypothesis, fig.pos="!h", fig.align="center",message=F, warning=F,error=F, fig.height=3, fig.width=6.5, fig.cap="Comparison of Type M error rate and Power level between one tailed and two tailed test with $\\rho = .25$, $\\alpha = .05$. n = sample size. " >>=
 
 load("../../Data/data_hypothesis.rda")
 
@@ -527,7 +536,7 @@ data_hypothesis <- data_hypothesis %>%
 
 
 p1 <- ggplot(data_hypothesis)+
-  geom_line(aes(n, power, linetype=alternative, col=alternative), size=1, stat="smooth")+
+  geom_line(aes(n, power, linetype=alternative, col=alternative), size=1.2, stat="smooth")+
   geom_hline(aes(yintercept=.8), linetype="dotted")+
   geom_hline(aes(yintercept=.6), linetype="dotted")+
   scale_linetype_manual(values = c(1,5))+
@@ -538,7 +547,7 @@ p1 <- ggplot(data_hypothesis)+
         legend.title = element_blank())
 
 p2 <- ggplot(data_hypothesis)+
-  geom_line(aes(n, typeM, linetype=alternative, col=alternative), size=1)+
+  geom_line(aes(n, typeM, linetype=alternative, col=alternative), size=1.2)+
   geom_hline(aes(yintercept=1), linetype="dotted")+
   scale_linetype_manual(values = c(1,5))+
   scale_y_continuous(breaks = seq(1,4, length.out = 6))+
@@ -562,7 +571,7 @@ grid.draw(p)
 pro_r(rho = .25, power = .8, alternative = "greater", sig_level = .05, seed = 2020)
 @
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \centering
   \includegraphics[height=5cm]{screens/pro2}
 \caption{Input and Output of the function \texttt{pro\_r()} for prospective design analysis. Plausible correlation coefficient is $\rho = .25$, statistical power is 80\% and the statistical test is one-tailed.}\label{fig:pro_r2}
@@ -580,16 +589,21 @@ In the scientific community, it is quite widespread the idea that the literature
 
 Peculiar to design analysis is the focus on the implications of design choices on effect sizes estimation rather than statistical significance only. We illustrated how Type M and Type S errors can be prevented with a \emph{prospective design analysis}. In the planning stage of a research project, design analysis has the potential to increase researchers’ awareness of the consequences that their sample size choices have on uncertainty about final estimates of the effects. This favors reasoning in similar terms to those in which results will be evaluated, that is to say, effect size estimation. But understanding the inferential risks in a study design is also beneficial once results are obtained. We presented \emph{retrospective design analysis} on a published study, and the same process can be useful for studies in general, especially those ending without the necessary sample size to maximize statistical power and minimize Type M and Type S errors. In all cases, presenting their values, effectively communicates the uncertainty of the results. In particular, Type M and Type S errors put a red flag when results are statistically significant, but the effect size could be largely overestimated and in the wrong direction. Finally, both prospective and retrospective design analysis favors cumulative science encouraging the incorporation of expert knowledge in the definition of the plausible effect sizes.
 
-To make design analysis accessible to the research community, we provide the R functions to perform prospective design analysis and retrospective design analysis for Pearson correlation coefficient \todo{(link)} together with a short guide on how to use the R functions and a summary of the examples presented in this contribution \todo{(Appendix B)}.
+To make design analysis accessible to the research community, we provide the R functions to perform prospective design analysis and retrospective design analysis for Pearson correlation coefficient \todo{(link)} together with a short guide on how to use the R functions and a summary of the examples presented in this contribution (Appendix~\ref{sec:appendix_b}).
 
 \todo{Aggiunta revisione Altoè}
 
 Choices regarding studies’ design impact effect size estimation. Type M (magnitude) error and Type S (sign) error directly quantify these inferential risks. Their consideration in a prospective design analysis increases awareness of what are the consequences of sample size choice reasoning in similar terms to those used in results evaluation. Instead, retrospective design analysis provides further guidance on interpreting research results. More broadly, design analysis reminds researchers that statistical inference should start before data collection and does not end when results are obtained.
 
-\clearpage
-
 \todo{rivedere numerazione paragrafi e sottoparagrafi\\
 }
+
+\clearpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Bibliography}
+%\printbibliography
+\bibliography{Paper_main}
 %----------------------------------------------------------------------------------%
 %--------------------------    Session Information   ------------------------------%
 %----------------------------------------------------------------------------------%
@@ -605,15 +619,208 @@ Choices regarding studies’ design impact effect size estimation. Type M (magni
 
 \clearpage
 
-\section*{Appendix A}
-\addcontentsline{toc}{section}{Appendix A:}
+\appendix
+\titleformat{\section}{\normalfont\Large\bfseries}{\setappendix}{0em}{}
+\renewcommand\thefigure{\thesection.\arabic{figure}}
+\renewcommand\theequation{\thesection.\arabic{equation}}
+%----------------------------------------------------------------------------------%
+%---------------------------       Appendix A      --------------------------------%
+%----------------------------------------------------------------------------------%
+
+\section{Pearson Correlation and Design Analysis}\label{sec:appendix_a}
+\setcounter{figure}{0}
+\setcounter{equation}{0}
+
+To conduct a design analysis, it is necessary to know the sampling distribution of the effect of interest not only under the Null-Hypothesis ($H_0$), but also under the alternative Hypothesis ($H_1$). The sampling distribution is the distribution of effects we would observe if \emph{n} observations were sampled over and over again from a population with a given effect. This allows us to evaluate the statistical power and inferential risks of the study considered.
+
+Regarding Pearson's correlation between two normally distributed variables, the sampling distribution is bounded between -1 and 1 and its shape depends on the values of $\rho$ and \emph{n}, repectively the population correlation value and the sample size. The sampling distribution is approximately Normal if $\rho = 0$. Whereas, for positive or negative values of $\rho$, it is negatively skewed or positively skewed, respectively. Skewness is greater for higher absolute values of $\rho$ but decreases when larger sample sizes are considered. In Figure~\ref{fig:Plot_sampling_rho}, correlation sampling distributions are presented for increasing values of $\rho$ and fixed sample size ($n = 30$).
+
+
+
+<<Data_plot_sampling_rho>>=
+data_sampling_rho <- data.frame(rho = factor(rep(c(0,.4,.6,.8), each=5e4)),
+                                value = unlist(map(list(0, .4, .6, .8), sample_rho, B = 5e4)))
+
+@
+
+<<Plot_sampling_rho, fig.pos="!h", fig.align="center", fig.height=3, fig.width=5, fig.cap="Pearson Correlation cosefficient sampling distributions for increasing values of $\\rho$ and fixed sample size ($n = 30$)" >>=
+ggplot(data_sampling_rho)+
+  stat_density(aes(x=value, linetype=rho, col=rho),
+               geom="line", size = 1.2, position="identity", bw=.025)+
+  scale_linetype_manual(values = c(1,2,6,3))+
+  scale_x_continuous(breaks = seq(-1, 1, by = .2))+
+  guides(colour = guide_legend(override.aes = list(size = 1.2 )))+
+  labs(x="$\\rho$",
+       linetype = "$\\rho$ :",
+       col = "$\\rho$ :")+
+  theme(legend.key.size = unit(.5, "cm"),
+        legend.direction = "horizontal",
+        legend.position = c(.5,.95),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank())
+
+@
+
+In the following paragraphs, we consider the consequence of Pearson's correlation sampling distribution on statistical inference and the behaviour of Type M and Type S errors as a function of statistical power.
+
+\subsection{Statistical inference}
+
+To test an hypothesis or to derive confidence intervals, it is necessary that the sampling distribution of the effect of interest follows a known distribution. In the case of $H_0:\ \rho = 0$, the sample correlation is approximately Normally distributed with Standard Error: $\text{SE}(r) = \sqrt{(1-r^2)/(n-2)}$. Thus, statistical inference is performed considering the \emph{t}-statistic:
+\begin{equation}
+  t = \frac{r}{\text{SE}(r)} = r \sqrt{\frac{n-2}{1-r^2}},
+\end{equation}
+that follows a \emph{t}-distribution with $df = n-2$.
+
+However, in the case of $\rho \neq 0$, assuming normality would lead to unreliable results. As we have previously seen, for large values of $\rho$ and small sample sizes the sampling distribution is skewed. To overcome this issue, the Fisher transformation was introduced \citep{fisherFrequencyDistributionValues1915}:
+\begin{equation}
+  F(r) = \frac{1}{2}\ ln \frac{1+r}{1-r} = \text{arctanh}(r).
+\end{equation}
+Applying this transformation, the resulting sample distribution is approximately Normal with $\text{mean} = F(\rho)$ and $\text{SE} = \frac{1}{\sqrt{n-3}}$. Thus, statistical inference is performed considering the \emph{Z}-scores.
+
+Alternatively, other methods can be used to obtain reliable results, as for example Monte Carlo simulation. Monte Carlo simulation is based on random sampling to approximate the quantities of interest. In the case of correlation, \emph{n} observations are iteratively simulated from a bivariate normal distribution with a given $\rho$, and the observed correlation is considered. As the number of iterations increases, the distribution of simulated correlation values approximates the actual correlation sampling distribution and it can be used to compute the quantities of interest.
+
+Although Monte Carlo methods are more computationally demanding than analytic solutions, this approach allows us to obtain reliable results in a wider range of conditions even when no closed-form solutions are available. For these reasons, the functions \texttt{pro\_r()} and \texttt{retro\_r()}, presented in this paper, are based on Monte Carlo simulation to compute power, Type M, and Type S error values. This guarantees a more general framework where other future applications can be easily integrated into the functions.
+
+\subsection{Type M and Type S errors}
+
+Design Analysis was first introduced by \citet{gelmanPowerCalculationsAssessing2014} assuming that the sampling distribution of the effect estimate follows a \emph{t}-distribution. This is the case, for example, of Cohen's \emph{d} effect size. Cohen's \emph{d} is used to measure the mean difference between two groups on a continuous outcome. The behaviour of Type M and Type S errors as a function of statistical power in the case of Cohen's \emph{d} is presented in Figure~\ref{fig:Plot_cohen}.
+
+<<Data_plot_cohen, eval=F>>=
+conditions_cohen <- expand.grid(d = c(.2, .5, .7, .9),
+                                n = c(seq(1,25, by=.2), 25:50,seq(55,100, by=5)))
+
+data_cohen <- mapply(retrodesignD, conditions_cohen$d, n = conditions_cohen$n,
+                     B = 2e5, seed=2020)
+
+data_cohen <- data_cohen%>%
+  t()%>%
+  as.data.frame()%>%
+  mutate_at(vars("d":"typeM"),unlist)
+@
+
+<<Plot_cohen,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Cohen's \\emph{d}. Note that the four lines are overlapping." >>=
+load("../../data/data_cohen.rda")
+
+data_cohen <- data_cohen%>%
+  mutate(d = factor(d))
+
+p1_cohen <- ggplot(data_cohen)+
+  geom_line(aes(power, typeM, linetype=d, col=d), size=1.2)+
+  geom_hline(aes(yintercept=1), linetype="dotted")+
+  scale_linetype_manual(values = c(1,2,6,3))+
+  scale_y_continuous(breaks = seq(1,12, length.out = 6),limits=c(1,12))+
+  scale_x_continuous(breaks = seq(0,1, length.out = 5),)+
+  labs(y="Type M",
+       x="Power")+
+  theme(legend.position = "none",
+        legend.direction = "horizontal",
+        legend.title = element_blank())
+
+p2_cohen <- ggplot(data_cohen)+
+  geom_line(aes(power, typeS, linetype=d, col=d), size=1.2)+
+  scale_linetype_manual(values = c(1,2,6,3))+
+  scale_y_continuous(breaks = seq(0,.3, length.out = 6),limits = c(0,.3))+
+  scale_x_continuous(breaks = seq(0,1, length.out = 5),)+
+  guides(colour = guide_legend(override.aes = list(size = 1.2 )))+
+  labs(y="Type S",
+       x="Power",
+       linetype = "Cohen's \\emph{d} :",
+       col = "Cohen's \\emph{d} :")+
+  theme(legend.position = "top",
+        legend.direction = "horizontal",
+        legend.key.size = unit(.5, "cm"))
+
+legend <- get_legend(p2_cohen)
+p2_cohen <- p2_cohen+theme(legend.position="none")
+
+p_cohen <- arrangeGrob(p1_cohen,p2_cohen,ncol = 2)
+p_cohen <- arrangeGrob(legend,p_cohen, ncol=1,heights = c(.1,1))
+
+grid.newpage()
+grid.draw(p_cohen)
+@
+
+
+For different values of hypothetical population effect size \todo{(\emph{d} = .2, .5, .7, .9)}, we can observe that, for high levels of power, Type S and Type M errors are low. Conversely, the Type S and Type M errors are high for low values of power. In particular, the relation between power and inferential errors is not influenced by the value of \emph{d} (i.e., the four lines are overlapping). Limit cases are obtained for power = 1 and 0.05 (note that the lowest value of power is given by the alpha value chosen as the statistical significance threshold). In the former case, Type S error is 0 and Type M error is 1. In the latter case, Type S error is 0.5 and the Type M error value goes to infinity.
+
+In the case of Pearson's Correlation, we noted above that the sampling distribution is skewed for large values of $\rho$ and small sample sizes. Moreover, the support is bounded between -1 and 1. Thus, the relations between power, Type M, and Type S error are influenced by the value of hypothetical population effect size (see Figure~\ref{fig:Plot_derign_rho}).
+
+<<Data_plot_rho, eval=F>>=
+conditions_rho <- expand.grid(rho = c(.2, .5, .7, .9),
+                              n = c(3:20,seq(from=22, to=40, by=2),seq(from=45, to=100, by=5), seq(from=110, to=200, by=10),250,300,500))
+conditions_rho$B <- c(rep(7e5, 12),rep(5e4, 200))
+
+data_conditions_rho <- mapply(retro_r, conditions_rho$rho[1:12],conditions_rho$n[1:12],
+                              B = conditions_rho$B[1:12], seed=2020)
+
+data_conditions_rho <- data_conditions_rho%>%
+  t()%>%
+  as.data.frame()%>%
+  mutate_at(vars("rho":"typeS"),unlist)
+@
+
+<<Plot_rho,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Peardson's correlation $\\rho$." >>=
+load("../../data/data_conditions_rho.rda")
+
+data_conditions_rho <- data_conditions_rho%>%
+  mutate(rho = factor(rho))
+
+p1_rho <- ggplot(data_conditions_rho)+
+  geom_line(aes(power, typeM, linetype=rho, col=rho), size=1.2)+
+  geom_hline(aes(yintercept=1), linetype="dotted")+
+  scale_linetype_manual(values = c(1,2,6,3))+
+  scale_y_continuous(breaks = seq(1,5, length.out = 6),limits=c(1,5))+
+  scale_x_continuous(breaks = seq(0,1, length.out = 5),)+
+  labs(y="Type M",
+       x="Power")+
+  theme(legend.position = "none",
+        legend.direction = "horizontal",
+        legend.title = element_blank())
+
+p2_rho <- ggplot(data_conditions_rho)+
+  geom_line(aes(power, typeS, linetype=rho, col=rho), size=1.2)+
+  scale_linetype_manual(values = c(1,2,6,3))+
+  scale_y_continuous(breaks = seq(0,.3, length.out = 6),limits = c(0,.3))+
+  scale_x_continuous(breaks = seq(0,1, length.out = 5),)+
+  guides(colour = guide_legend(override.aes = list(size = 1.2 )))+
+  labs(y="Type S",
+       x="Power",
+       linetype = "$\\rho$ :",
+       col = "$\\rho$ :")+
+  theme(legend.position = "top",
+        legend.direction = "horizontal",
+        legend.key.size = unit(.5, "cm"))
+
+legend <- get_legend(p2_rho)
+p2_rho <- p2_rho+theme(legend.position="none")
+
+p_rho <- arrangeGrob(p1_rho,p2_rho,ncol = 2)
+p_rho <- arrangeGrob(legend,p_rho, ncol=1,heights = c(.1,1))
+
+grid.newpage()
+grid.draw(p_rho)
+@
+
+
+We can observe how, for different values of correlation \todo{($\rho$ = .2, .5, .7, .9)}, Type M error increases at different rates when the power decrease, whereas Type S error follows a consistent pattern (note that differences are due to numerical approximation). We can intuitively explain this behaviour considering that, for low levels of power, the sampling distribution includes a wider range of correlation values. However, correlation values can not exceed the value 1 and therefore the distribution becomes progressively more skewed. This does not influence the proportion of statistically significant sampled correlations with the incorrect sign (Type S error), but it affects the mean absolute value of statistically significant sampled correlations (used to compute Type M error). In particular, sampling distributions for greater values of $\rho$ becomes skewed more rapidly and thus Type-M error increases at a lower rate.
+
+Finally, since the correlation values are bounded, Type-M error for a given value of $\rho$ can increase only to a maximum value given by $\frac{1}{\rho}$. For example, for $\rho = .5$ the maximum Type-M error is 2 as $.5\times 2 = 1$ (i.e., the maximum correlation value).
+
+In this appendix, we discussed for completeness the implications of conducting a Design Analysis in the case of Pearson's correlation effect size. We considered extreme scenarios that are unlikely to happen in real research settings. Nevertheless, we thought this was important for evaluating the statistical behaviour and properties of Type M and Type S error in the case of Pearson's correlation as well as helping researchers to deeply understand Design Analysis.
 
 \clearpage
 
-\phantomsection
-\addcontentsline{toc}{section}{Bibliography}
-%\printbibliography
-\bibliography{Paper_main}
+%----------------------------------------------------------------------------------%
+%---------------------------       Appendix B      --------------------------------%
+%----------------------------------------------------------------------------------%
+
+\section{Pearson Correlation and Design Analysis}\label{sec:appendix_b}
+\setcounter{figure}{0}
+\setcounter{equation}{0}
+
+
 
 \end{document}
 
