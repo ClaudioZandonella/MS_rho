@@ -501,7 +501,7 @@ data_table2 %>%
   kable(.,"latex", booktabs=T,align = "c",col.names = c("$\\bm{\\alpha}$-level", "Power", "Type M", "Type S", "Critical \\textit{r} value"),caption = "How changes in $\\alpha$ level impact Power, Type M error, Type S error and critical values.", escape = FALSE) %>%
   row_spec(0,bold = T, align = "c") %>%
   kable_styling(position = "center", latex_options = "HOLD_position")%>%
-  footnote(general = 'In all cases, $\\rho=.25$, n = 13, and alternative  = \\\\texttt{"two.sided"}.',footnote_as_chunk = T,escape=F)
+  footnote(general = 'In all cases, $\\\\rho=.25$, n = 13, and alternative  = \\\\texttt{"two.sided"}.',footnote_as_chunk = T,escape=F)
 
 @
 
