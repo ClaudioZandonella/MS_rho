@@ -495,13 +495,13 @@ data_table2 <- map(alpha_list, retro_r, rho =.25,  n = 13, alternative = "two.si
 data_table2 %>%
   filter(duplicated(sig_level)) %>%
   mutate_at(vars(typeM:crit_r), round, 3) %>%
-  mutate(power=round(power,1),
+  mutate(power=round(power,3),
          crit_r = paste0("$\\pm",crit_r,"$")) %>%
   dplyr::select(sig_level, power, typeM, typeS, crit_r) %>%
   kable(.,"latex", booktabs=T,align = "c",col.names = c("$\\bm{\\alpha}$-level", "Power", "Type M", "Type S", "Critical \\textit{r} value"),caption = "How changes in $\\alpha$ level impact Power, Type M error, Type S error and critical values.", escape = FALSE) %>%
   row_spec(0,bold = T, align = "c") %>%
   kable_styling(position = "center", latex_options = "HOLD_position")%>%
-  footnote(general = 'In all cases, n = 13 and alternative  = \\\\texttt{"two.sided"}.',footnote_as_chunk = T,escape=F)
+  footnote(general = 'In all cases, $\\rho=.25$, n = 13, and alternative  = \\\\texttt{"two.sided"}.',footnote_as_chunk = T,escape=F)
 
 @
 
@@ -598,24 +598,10 @@ Choices regarding studies’ design impact effect size estimation. Type M (magni
 \todo{rivedere numerazione paragrafi e sottoparagrafi\\
 }
 
-\clearpage
-
 \phantomsection
 \addcontentsline{toc}{section}{Bibliography}
 %\printbibliography
 \bibliography{Paper_main}
-%----------------------------------------------------------------------------------%
-%--------------------------    Session Information   ------------------------------%
-%----------------------------------------------------------------------------------%
-
-
-\section{Session Information}
-
-<<Session Info, echo=T>>=
-  sessionInfo(package = NULL)
-
-
-@
 
 \clearpage
 
@@ -816,10 +802,105 @@ In this appendix, we discussed for completeness the implications of conducting a
 %---------------------------       Appendix B      --------------------------------%
 %----------------------------------------------------------------------------------%
 
-\section{Pearson Correlation and Design Analysis}\label{sec:appendix_b}
+\section{R Functions for Design Analysis\\ with Pearson Correlation}\label{sec:appendix_b}
 \setcounter{figure}{0}
 \setcounter{equation}{0}
 
+Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples included in the article.
+
+These functions can be used as a base to further develop design analysis in more complex scenarios that were beyond the aim of the paper.
+
+\subsection{R functions}
+
+The code of the functions is available in the file \texttt{Design\_analysis\_r.R} at \todo{add link}.
+
+After downloading the file \texttt{Design\_analysis\_r.R}, run the line indicating the correct path where the file was saved:
+<<intruction1, echo=T, eval=F>>=
+source("<your_path>/Design_analyisis_r.R")
+@
+The script will automatically load in your work space the functions and two required R-package: \texttt{MASS} \citep{venablesModernAppliedStatistics2002} and \texttt{docstring} \citet{kurkiewiczDocstringProvidesDocstring2017}. If you don't have them already installed run the line \texttt{install.packages(c("MASS","docstring"))}.
+
+The R functions are:
+\begin{itemize}
+\item{\texttt{retro\_r()} for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the critical correlation value (i.e., the minimum absolute correlation value that would result significant).}
+<<function_retro, eval=F, echo=T, tidy.opts = list(width.cutoff = 60)>>=
+retro_r(rho, n, alternative = c("two.sided", "less", "greater"),
+        sig_level=.05, B=1e4, seed=NULL)
+@
+
+\item{\texttt{pro\_r()} for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the critical correlation value.
+<<function_pro, eval=F, echo=T,tidy.opts = list(width.cutoff = 65)>>=
+pro_r(rho, power = .80, alternative = c("two.sided", "less", "greater"),
+      sig_level = .05, range_n = c(1,1000), B = 1e4, tol = .01,
+      display_message = FALSE, seed = NULL)
+@
+}
+\end{itemize}
+
+For further details about function arguments, run the line \texttt{docstring(retro\_r)} or \texttt{docstring(pro\_r)}. This creates a documentation similar to the help page of R functions.
+
+\textbf{Note:} two other functions are defined in the script and will be loaded in your workspace (i.e., \texttt{compute\_crit\_r()} and \texttt{print.design\_analysus}). This are internal functions that should not be used directly by the user.
+
+\subsection{Examples code}
+
+Below we report the code to reproduce the examples included in the article.
+
+<<ex_figure1, eval=F, echo=T>>=
+# Example from Figure 1
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 2020)
+@
+
+<<ex_figure3, eval=F, echo=T>>=
+# Example from Figure 3
+
+pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+@
+
+<<ex_figure6, eval=F, echo=T>>=
+# Example from Figure 6
+
+pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+@
+
+<<ex_table1, eval=F, echo=T>>=
+# Examples from Table 1
+
+pro_r(rho = .25, power = .6, alternative = "two.sided", sig_level = .05, seed = 2020)
+
+pro_r(rho = .15, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+
+pro_r(rho = .35, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+@
+
+<<ex_table2, eval=F, echo=T>>=
+# Examples from Table 2
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .100, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .050, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .010, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .005, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .001, seed = 2020)
+@
+
+
+\clearpage
+%----------------------------------------------------------------------------------%
+%--------------------------    Session Information   ------------------------------%
+%----------------------------------------------------------------------------------%
+
+
+\section{Session Information}
+
+<<Session Info, echo=T>>=
+  sessionInfo(package = NULL)
+
+
+@
 
 
 \end{document}
