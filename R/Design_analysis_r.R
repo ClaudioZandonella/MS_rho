@@ -341,7 +341,7 @@ print.design_analysis <- function(DA_list, prefix="\t"){
         output_text[c("power", "typeM", "typeS")]))),
         print.gap = 3, right = F, row.names = F)), sep = '\n')
   cat("\n")
-  cat("Critical value: r = ", output_text$crit_r)
+  cat("Critical value(s): r = ", output_text$crit_r)
 
   invisible(DA_list)
 }
