@@ -164,7 +164,7 @@ source("../../R/Auxiliary_functions.R")       # Load Auxiliary functions
 % Document title info
 
 \title{\LARGE\textbf{Designing Studies and Evaluating Research Results:\\
-Type M and Type S Errors for Pearson Correlation Coefficient
+Type M and Type S Errors for\\ Pearson Correlation Coefficient
 }}
 
 \author{Giulia Bertoldo~$^{1}$, Claudio Zandonella Callegher~$^{1}$, and Gianmarco Altoè~$^{1,}$\thanks{Correspondence:\newline
@@ -768,7 +768,7 @@ data_conditions_rho <- data_conditions_rho%>%
   mutate_at(vars("rho":"typeS"),unlist)
 @
 
-<<Plot_rho,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Peardson's correlation $\\rho$." >>=
+<<Plot_rho,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Pearson's correlation $\\rho$." >>=
 load("../../data/data_conditions_rho.rda")
 
 data_conditions_rho <- data_conditions_rho%>%
