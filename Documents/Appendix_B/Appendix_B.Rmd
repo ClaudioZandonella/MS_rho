@@ -17,35 +17,84 @@ knitr::opts_chunk$set(echo = TRUE)
 source("../../R/Design_analysis_r.R")
 ```
 
-Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples and figures included in the article. 
+Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples included in the article.
 
 These functions can be used as a base to further develop design analysis in more complex scenarios that were beyond the aim of the paper.
 
 ## R functions
 
-The code of the functions is available in the file `Design_analysis_r.R` at **todo{add link}**.
+The code of the functions is available in the file `Design_analysis_r.R` at *todo{add link}*.
 
-After downloading the file `Design_analysis_r.R`, run the line `source("your_path/Design_analyisis_r.R")`, indicating the correct path where the file was saved. The script will automatically load in your work space the functions and two required R-package: `MASS` [@venablesModernAppliedStatistics2002] and `docstring` [@kurkiewiczDocstringProvidesDocstring2017]. If you don't have them already installed run the line `install.packages(c("MASS","docstring"))`. 
+After downloading the file `Design_analysis_r.R`, run the line , indicating the correct path where the file was saved. 
+```{intruction1, echo=T, eval=F}
+source("<your_path>/Design_analyisis_r.R")
+```
+The script will automatically load in your work space the functions and two required R-package: `MASS` [@venablesModernAppliedStatistics2002] and `docstring` [@kurkiewiczDocstringProvidesDocstring2017]. If you don't have them already installed run the line `install.packages(c("MASS","docstring"))`. 
 
 The R functions are:
 
-- `retro_r()` for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the minimum correlation value that would result significant.
+- `retro_r()` for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the critical correlation value (i.e., the minimum absolute correlation value that would result significant).
 ```{r, eval=FALSE}
 retro_r(rho, n, alternative = c("two.sided", "less", "greater"), 
         sig_level=.05, B=1e4, seed=NULL)
 ```
 
-- `pro_r()` for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the minimum correlation value that would result significant. 
+- `pro_r()` for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the critical correlation value. 
 ```{r, eval=FALSE}
 pro_r(rho, power = .80, alternative = c("two.sided", "less", "greater"), 
       sig_level = .05, range_n = c(1,1000), B = 1e4, tol = .01, 
-      display_message = TRUE, seed = NULL)
+      display_message = FALSE, seed = NULL)
 ```
 
 
 For further details about function arguments, run the line `docstring(retro_r)` or `docstring(pro_r)`. This creates a documentation similar to the help pages of R functions.
 
-**Note:** a third function is defined in the script (i.e., `compute_crit_r()`). This is an internal function that should not be used by the user.
+**Note:** two other functions are defined in the script and will be loaded in your workspace (i.e., `compute\_crit\_r()` and `print.design\_analysus`). This are internal functions that should not be used directly by the user.
 
+Below we report the code to reproduce the examples included in the article.
+
+## Examples code
+
+```{ex_figure1, eval=F, echo=T}
+# Example from Figure 1
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .05, seed = 2020)
+```
+
+```{ex_figure3, eval=F, echo=T}
+# Example from Figure 3
+
+pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+```
+
+```{ex_figure6, eval=F, echo=T}
+# Example from Figure 6
+
+pro_r(rho = .25, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+```
+
+```{ex_table1, eval=F, echo=T}
+# Examples from Table 1
+
+pro_r(rho = .25, power = .6, alternative = "two.sided", sig_level = .05, seed = 2020)
+
+pro_r(rho = .15, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+
+pro_r(rho = .35, power = .8, alternative = "two.sided", sig_level = .05, seed = 2020)
+```
+
+```{ex_table2, eval=F, echo=T}
+# Examples from Table 2
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .100, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .050, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .010, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .005, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .001, seed = 2020)
+```
 
 ## References

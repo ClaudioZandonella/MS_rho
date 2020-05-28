@@ -304,26 +304,59 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<p>Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples and figures included in the article.</p>
+<p>Here we describe the R functions defined to perform a prospective and retrospective design analysis in the case of Pearson correlation. First, we give instructions on how to load and use the functions. Subsequently, we provide the code to reproduce examples included in the article.</p>
 <p>These functions can be used as a base to further develop design analysis in more complex scenarios that were beyond the aim of the paper.</p>
 <div id="r-functions" class="section level2">
 <h2>R functions</h2>
-<p>The code of the functions is available in the file <code>Design_analysis_r.R</code> at <strong>todo{add link}</strong>.</p>
-<p>After downloading the file <code>Design_analysis_r.R</code>, run the line <code>source(&quot;your_path/Design_analyisis_r.R&quot;)</code>, indicating the correct path where the file was saved. The script will automatically load in your work space the functions and two required R-package: <code>MASS</code> <span class="citation">(Venables and Ripley 2002)</span> and <code>docstring</code> <span class="citation">(Kurkiewicz 2017)</span>. If you don’t have them already installed run the line <code>install.packages(c(&quot;MASS&quot;,&quot;docstring&quot;))</code>.</p>
+<p>The code of the functions is available in the file <code>Design_analysis_r.R</code> at <em>todo{add link}</em>.</p>
+<p>After downloading the file <code>Design_analysis_r.R</code>, run the line , indicating the correct path where the file was saved.</p>
+<pre class="intruction1"><code>source(&quot;&lt;your_path&gt;/Design_analyisis_r.R&quot;)</code></pre>
+<p>The script will automatically load in your work space the functions and two required R-package: <code>MASS</code> <span class="citation">(Venables and Ripley 2002)</span> and <code>docstring</code> <span class="citation">(Kurkiewicz 2017)</span>. If you don’t have them already installed run the line <code>install.packages(c(&quot;MASS&quot;,&quot;docstring&quot;))</code>.</p>
 <p>The R functions are:</p>
 <ul>
-<li><code>retro_r()</code> for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the minimum correlation value that would result significant.</li>
+<li><code>retro_r()</code> for retrospective design analysis. Given the hypothetical population correlation value and sample size, this function performs a retrospective design analysis according to the defined alternative hypothesis and significance level. Power level, Type-M error, and Type-S error are computed together with the critical correlation value (i.e., the minimum absolute correlation value that would result significant).</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">retro_r</span>(rho, n, <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;greater&quot;</span>), </span>
-<span id="cb1-2"><a href="#cb1-2"></a>        <span class="dt">sig_level=</span>.<span class="dv">05</span>, <span class="dt">B=</span><span class="fl">1e4</span>, <span class="dt">seed=</span><span class="ot">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">retro_r</span>(rho, n, <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;greater&quot;</span>), </span>
+<span id="cb2-2"><a href="#cb2-2"></a>        <span class="dt">sig_level=</span>.<span class="dv">05</span>, <span class="dt">B=</span><span class="fl">1e4</span>, <span class="dt">seed=</span><span class="ot">NULL</span>)</span></code></pre></div>
 <ul>
-<li><code>pro_r()</code> for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the minimum correlation value that would result significant.</li>
+<li><code>pro_r()</code> for prospective design analysis. Given the hypothetical population correlation value and the required power level, this function performs a prospective design analysis according to the defined alternative hypothesis and significance level. The required sample size is computed together with the associated Type-M error, Type-S error, and the critical correlation value.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">pro_r</span>(rho, <span class="dt">power =</span> <span class="fl">.80</span>, <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;greater&quot;</span>), </span>
-<span id="cb2-2"><a href="#cb2-2"></a>      <span class="dt">sig_level =</span> <span class="fl">.05</span>, <span class="dt">range_n =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1000</span>), <span class="dt">B =</span> <span class="fl">1e4</span>, <span class="dt">tol =</span> <span class="fl">.01</span>, </span>
-<span id="cb2-3"><a href="#cb2-3"></a>      <span class="dt">display_message =</span> <span class="ot">TRUE</span>, <span class="dt">seed =</span> <span class="ot">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">pro_r</span>(rho, <span class="dt">power =</span> <span class="fl">.80</span>, <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, <span class="st">&quot;greater&quot;</span>), </span>
+<span id="cb3-2"><a href="#cb3-2"></a>      <span class="dt">sig_level =</span> <span class="fl">.05</span>, <span class="dt">range_n =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1000</span>), <span class="dt">B =</span> <span class="fl">1e4</span>, <span class="dt">tol =</span> <span class="fl">.01</span>, </span>
+<span id="cb3-3"><a href="#cb3-3"></a>      <span class="dt">display_message =</span> <span class="ot">FALSE</span>, <span class="dt">seed =</span> <span class="ot">NULL</span>)</span></code></pre></div>
 <p>For further details about function arguments, run the line <code>docstring(retro_r)</code> or <code>docstring(pro_r)</code>. This creates a documentation similar to the help pages of R functions.</p>
-<p><strong>Note:</strong> a third function is defined in the script (i.e., <code>compute_crit_r()</code>). This is an internal function that should not be used by the user.</p>
+<p><strong>Note:</strong> two other functions are defined in the script and will be loaded in your workspace (i.e., <code>compute\_crit\_r()</code> and <code>print.design\_analysus</code>). This are internal functions that should not be used directly by the user.</p>
+<p>Below we report the code to reproduce the examples included in the article.</p>
+</div>
+<div id="examples-code" class="section level2">
+<h2>Examples code</h2>
+<pre class="ex_figure1"><code># Example from Figure 1
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)</code></pre>
+<pre class="ex_figure3"><code># Example from Figure 3
+
+pro_r(rho = .25, power = .8, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)</code></pre>
+<pre class="ex_figure6"><code># Example from Figure 6
+
+pro_r(rho = .25, power = .8, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)</code></pre>
+<pre class="ex_table1"><code># Examples from Table 1
+
+pro_r(rho = .25, power = .6, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)
+
+pro_r(rho = .15, power = .8, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)
+
+pro_r(rho = .35, power = .8, alternative = &quot;two.sided&quot;, sig_level = .05, seed = 2020)</code></pre>
+<pre class="ex_table2"><code># Examples from Table 2
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .100, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .050, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .010, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .005, seed = 2020)
+
+retro_r(rho = .25, n = 13, alternative = &quot;two.sided&quot;, sig_level = .001, seed = 2020)</code></pre>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>
