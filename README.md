@@ -17,6 +17,7 @@ In this repository we collect all the material used in the article. To compile a
 
 In the folder [Documents/Paper_main](Documents/Paper_main/) you can find the scripts to compile the pdf version of the paper:
 
+- [Paper_main.pdf](Documents/Paper_main.pdf) is the the pdf of the paper
 - [Paper_main.Rnw](Documents/Paper_main.Rnw) is the R script to compile the pdf including R chunk code
 - [Paper_main.tex](Documents/Paper_main.tex) is the LaTeX script to compile the pdf
 - [Paper_main.bib](Documents/Paper_ma|in.bib) is the reference list
@@ -29,4 +30,4 @@ In the folder [R](R/) you can find the R scripts with the functions code:
 
 In the folder [Data](Data/) you can find the pre-compiled datasets used in the plots and tables to avoid long running times. To obtain these datasets you can run the chunks code where `eval=F`.
 
-In the folder [renv](renv/) there are information about project’s R dependencies. To know more about `renv` see its homepage ([link](https://rstudio.github.io/renv/)) 
+In the folder [renv](renv/) there are information about project’s R dependencies. To know more about `renv` see its homepage ([link](https://rstudio.github.io/renv/)).
