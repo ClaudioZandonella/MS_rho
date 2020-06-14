@@ -205,7 +205,7 @@ It is widely appreciated that many studies in psychological science suffer from 
 \end{abstract} \hspace{10pt}
 
 %TC:ignore
-\keywords{Correlation coefficient; Type M Error, Type S error, Design analysis,  Effect size}
+\keywords{Correlation coefficient; Type M error, Type S error, Design analysis,  Effect size}
 
 \noindent\rule{\linewidth}{0.6pt}
 
