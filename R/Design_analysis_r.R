@@ -170,9 +170,9 @@ pro_r<-function(rho, power = .80, alternative = c("two.sided", "less", "greater"
   #'   letter.
   #' @param sig_level a numeric value indicating the significance level on which
   #'   the alternative hypothesis is evaluated.
-  #' @param range_n a lenght-2 numeric vector indicating the minimum and maximum
+  #' @param range_n a length-2 numeric vector indicating the minimum and maximum
   #'   sample size considered in the evaluation of the required sample size.
-  #' @param B a numric  value indicating the number of iterations. Increase the
+  #' @param B a numeric  value indicating the number of iterations. Increase the
   #'   number of iterations to obtain more stable results.
   #' @param tol a numeric value indicating the tolerance of required power level.
   #' @param display_message a logical variable indicating whether to display or
