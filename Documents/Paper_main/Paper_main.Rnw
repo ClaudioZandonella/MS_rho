@@ -200,8 +200,16 @@ Gianmarco Altoè: \href{https://orcid.org/0000-0003-1154-9528}{0000-0003-1154-95
 
 \clearpage
 
+% added info peer revieew
+\noindent \textit{Under peer review at Meta-Psychology. This is a revised version of the submitted paper. The editorial process, including decision letters and reviews, can be accessed at:}
+
+\noindent \textit{\url{http://tinyurl.com/mp-submissions}}
+
+\noindent \textit{Anyone can contribute with Open Peer Review through hypothes.is directly on this preprint.}
+
+
 \begin{abstract}
-It is widely appreciated that many studies in psychological science suffer from low statistical power. One of the consequences of analyzing underpowered studies with thresholds of statistical significance is a high risk of finding exaggerated effect size estimates, in the right or the wrong direction. These inferential risks can be directly quantified in terms of Type M (magnitude) error and Type S (sign) error, which directly communicate the consequences of design choices on effect size estimation. Given a study design, Type M error is the factor by which a statistically significant effect is on average exaggerated. Type S error is the probability to find a statistically significant result in the opposite direction to the plausible one. Ideally, these errors should be considered during a \emph{prospective design analysis} in the design phase of a study to determine the appropriate sample size. However, they can also be considered when evaluating studies’ results in a \emph{retrospective design analysis}. In the present contribution, we aim to facilitate the considerations of these errors in the research practice in psychology. For this reason, we illustrate how to consider Type M and Type S errors in a design analysis using one of the most common effect size measures in psychology: Pearson correlation coefficient. We provide various examples and make the R functions freely available to enable researchers to perform design analysis for their research projects.
+\noindent It is widely appreciated that many studies in psychological science suffer from low statistical power. One of the consequences of analyzing underpowered studies with thresholds of statistical significance is a high risk of finding exaggerated effect size estimates, in the right or the wrong direction. These inferential risks can be directly quantified in terms of Type M (magnitude) error and Type S (sign) error, which directly communicate the consequences of design choices on effect size estimation. Given a study design, Type M error is the factor by which a statistically significant effect is on average exaggerated. Type S error is the probability to find a statistically significant result in the opposite direction to the plausible one. Ideally, these errors should be considered during a \emph{prospective design analysis} in the design phase of a study to determine the appropriate sample size. However, they can also be considered when evaluating studies’ results in a \emph{retrospective design analysis}. In the present contribution, we aim to facilitate the considerations of these errors in the research practice in psychology. For this reason, we illustrate how to consider Type M and Type S errors in a design analysis using one of the most common effect size measures in psychology: Pearson correlation coefficient. We provide various examples and make the R functions freely available to enable researchers to perform design analysis for their research projects.
 \end{abstract} \hspace{10pt}
 
 %TC:ignore
