@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.1",
+    "Version": "4.1.0",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -225,6 +225,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "dad6793a5a1f73c8e91f1a1e3e834b05"
+    },
+    "filehash": {
+      "Package": "filehash",
+      "Version": "2.4-2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "417af4bf86b11fdc8737a28905a35136"
     },
     "forcats": {
       "Package": "forcats",
@@ -492,6 +499,13 @@
       "Repository": "CRAN",
       "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f"
     },
+    "png": {
+      "Package": "png",
+      "Version": "0.1-7",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "03b7076c234cb3331288919983326c55"
+    },
     "praise": {
       "Package": "praise",
       "Version": "1.0.0",
@@ -578,10 +592,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.5",
+      "Version": "0.4.11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1cc1b38e4db40ea6eb19ab8080bbed3b"
+      "Hash": "515f341d3affe0de9e4a7f762efb0456"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -669,10 +683,10 @@
     },
     "tictoc": {
       "Package": "tictoc",
-      "Version": "1.0",
+      "Version": "1.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f8cc5adf4671b013434bbe127f35b28c"
+      "Hash": "5acb66b0266ad1f0ebf7ffe1aa36ff4c"
     },
     "tidyr": {
       "Package": "tidyr",
@@ -694,6 +708,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "bd51be662f359fa99021f3d51e911490"
+    },
+    "tikzDevice": {
+      "Package": "tikzDevice",
+      "Version": "0.12.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "78009f10e5ea26a71103c5ad22632fc8"
     },
     "tinytex": {
       "Package": "tinytex",
