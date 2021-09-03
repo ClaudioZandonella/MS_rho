@@ -23,7 +23,6 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 
-
 %----    Other packages    ----%
 \usepackage{tikz}
 \usepackage{graphicx}   % for including graphics
@@ -43,6 +42,9 @@
 \addbibresource{Paper_main.bib}
 % \usepackage[natbibapa]{apacite}
 % \bibliographystyle{apacite}
+
+\usepackage{grfext}  % added for tinytex
+\usepackage{framed}  % added for tinytex
 
 \usepackage{hyperref}    % ref between elements
 
@@ -959,6 +961,4 @@ retro_r(rho = .25, n = 13, alternative = "two.sided", sig_level = .001, seed = 2
 
 
 \end{document}
-
-
 
