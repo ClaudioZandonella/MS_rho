@@ -742,7 +742,7 @@ data_cohen <- data_cohen%>%
 @
 
 <<Plot_cohen,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Cohen's \\emph{d}. Note that the four lines are overlapping." >>=
-load("../../data/data_cohen.rda")
+load("../../Data/data_cohen.rda")
 
 data_cohen <- data_cohen%>%
   mutate(d = factor(d))
@@ -803,7 +803,7 @@ data_conditions_rho <- data_conditions_rho%>%
 @
 
 <<Plot_rho,warning=F, fig.pos="!h", fig.align="center", fig.height=3, fig.width=6, fig.cap="The behaviour of Type M and Type S errors as a function of statistical power in the case of Pearson's correlation $\\rho$." >>=
-load("../../data/data_conditions_rho.rda")
+load("../../Data/data_conditions_rho.rda")
 
 data_conditions_rho <- data_conditions_rho%>%
   mutate(rho = factor(rho))
