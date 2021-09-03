@@ -185,7 +185,7 @@ University of Padova, Via Venezia 8, 35131 Padova, Italy\newline
 \thispagestyle{empty}
 \begin{center}
 \vfill
-\textbf{Submitted to \textit{Meta-Psychology}. Click here to follow the fully transparent editorial process of this submission. Participate in open peer review by commenting through hypothes.is directly on this preprint.}
+\textbf{In press at \textit{Meta-Psychology}. Click \href{http://tinyurl.com/mp-submissions}{here}  to follow the fully transparent editorial process of this submission. Participate in open peer review by commenting through hypothes.is directly on this preprint.}
 \vfill
 \textbf{\large Author Note}
 \end{center}
@@ -201,7 +201,7 @@ Gianmarco Altoè: \href{https://orcid.org/0000-0003-1154-9528}{0000-0003-1154-95
 \clearpage
 
 % added info peer revieew
-\noindent \textit{Under peer review at Meta-Psychology. This is a revised version of the submitted paper. The editorial process, including decision letters and reviews, can be accessed at:}
+\noindent \textit{In press at Meta-Psychology. This is a revised version of the submitted paper. The editorial process, including decision letters and reviews, can be accessed at:}
 
 \noindent \textit{\url{http://tinyurl.com/mp-submissions}}
 
@@ -407,7 +407,7 @@ At first, it might seem that Type M and Type S errors are redundant with the inf
 <<Data_plot_scenarios, eval = F>>=
 conditions <- expand.grid(rho = c(.25, .50, .75),
                           n = c(3:20,seq(from=22, to=40, by=2),seq(from=45, to=100, by=5), seq(from=110, to=200, by=10),250,300,500))
-conditions$B <- c(rep(7e5, 3),rep(5e4, 150))
+conditions$B <- c(rep(7e5, 9),rep(5e4, 150))
 
 
 data_conditions <- mapply(retro_r, conditions$rho,  conditions$n, B = conditions$B, seed=2020)
@@ -791,8 +791,8 @@ conditions_rho <- expand.grid(rho = c(.2, .5, .7, .9),
                               n = c(3:20,seq(from=22, to=40, by=2),seq(from=45, to=100, by=5), seq(from=110, to=200, by=10),250,300,500))
 conditions_rho$B <- c(rep(7e5, 12),rep(5e4, 200))
 
-data_conditions_rho <- mapply(retro_r, conditions_rho$rho[1:12],conditions_rho$n[1:12],
-                              B = conditions_rho$B[1:12], seed=2020)
+data_conditions_rho <- mapply(retro_r, conditions_rho$rho,conditions_rho$n,
+                              B = conditions_rho$B, seed=2020)
 
 data_conditions_rho <- data_conditions_rho%>%
   t()%>%
